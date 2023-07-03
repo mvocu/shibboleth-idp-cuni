@@ -1,0 +1,618 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AttributeResolver
+        xmlns="urn:mace:shibboleth:2.0:resolver" 
+        xmlns:resolver="urn:mace:shibboleth:2.0:resolver" 
+        xmlns:pc="urn:mace:shibboleth:2.0:resolver:pc"
+        xmlns:ad="urn:mace:shibboleth:2.0:resolver:ad" 
+        xmlns:dc="urn:mace:shibboleth:2.0:resolver:dc"
+        xmlns:enc="urn:mace:shibboleth:2.0:attribute:encoder" 
+        xmlns:sec="urn:mace:shibboleth:2.0:security"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:schemaLocation="urn:mace:shibboleth:2.0:resolver http://shibboleth.net/schema/idp/shibboleth-attribute-resolver.xsd
+                            urn:mace:shibboleth:2.0:resolver:pc http://shibboleth.net/schema/idp/shibboleth-attribute-resolver-pc.xsd
+                            urn:mace:shibboleth:2.0:resolver:ad http://shibboleth.net/schema/idp/shibboleth-attribute-resolver-ad.xsd
+                            urn:mace:shibboleth:2.0:resolver:dc http://shibboleth.net/schema/idp/shibboleth-attribute-resolver-dc.xsd
+                            urn:mace:shibboleth:2.0:attribute:encoder http://shibboleth.net/schema/idp/shibboleth-attribute-encoder.xsd
+                            urn:mace:shibboleth:2.0:security http://shibboleth.net/schema/idp/shibboleth-security.xsd">
+
+    <DataConnector id="scriptedAttributes" xsi:type="ScriptedDataConnector"
+	exportAttributes="eduPersonAffiliation eduPersonEntitlement cuniPersonScopedAffiliation mefaPerson authorizedMail eduPersonAssurance" >
+
+        <InputDataConnector ref="cuniLDAP" allAttributes="true" />
+
+        <Script><![CDATA[
+
+			      IdpAttribute = Java.type("net.shibboleth.idp.attribute.IdPAttribute");
+			      StringAttributeValue = Java.type("net.shibboleth.idp.attribute.StringAttributeValue");
+                              ScopedAttributeValue = Java.type("net.shibboleth.idp.attribute.ScopedStringAttributeValue");
+			      HashSet = Java.type("java.util.HashSet");
+			      Integer = Java.type("java.lang.Integer");          
+
+
+           // ------------------------------
+           //   eduPersonAffiliation 
+           // ------------------------------
+
+			      attr = new IdpAttribute("eduPersonAffiliation");
+			      values = new HashSet();
+			      is_member = false;
+			      is_employee = false;
+			      is_interrupted = false;
+
+			      if(typeof(eduPersonAffiliation) != "undefined") { 
+
+                                      affs = eduPersonAffiliation.getValues();
+				      for(i = 0; i < affs.size(); i++) {
+					      value = affs.get(i);
+					      if(/(student|interrupted-student|affiliate|staff|employee)/.test(value)) {
+							is_member = true;
+					      }
+					      if("staff" == value) {
+							is_employee = true;
+					      }
+					      if("interrupted-student" == value) {
+							is_interrupted = true;
+					      }
+					      if(/(affiliate|member|staff|student|employee)/.test(value)) {
+							values.add(new StringAttributeValue(value));
+					      }
+				      }
+				      if(is_member) {
+	                              	      values.add(new StringAttributeValue("member"));
+				      }
+				      if(is_employee) { 
+					      values.add(new StringAttributeValue("employee"));
+				      }
+			      }
+			      if(typeof(nsRole) != "undefined") {
+				      for(i=0; i < nsRole.getValues().size(); i++) {
+					      value = nsRole.getValues().get(i);
+					      match = /cn=member@.*\.cuni\.cz,.*/.exec(value);
+					      if(match) {
+						      values.add(new StringAttributeValue("member"));
+					      }
+				      }
+			      }
+			      if(typeof(cuniPersonEntitlement) != "undefined") {
+				      for(i=0; i < cuniPersonEntitlement.getValues().size(); i++) {
+					      value = cuniPersonEntitlement.getValues().get(i);
+					      match = /urn:cuni:affiliation:alumn@(.*)/.exec(value);
+					      if(match) {
+						values.add(new StringAttributeValue("alum"));
+					      }
+				      }
+			      }
+			      
+			      attr.setValues(values);
+			      connectorResults.add(attr);
+
+
+           // ------------------------------
+           //   eduPersonEntitlement
+           // ------------------------------
+
+			      attr = new IdpAttribute("eduPersonEntitlement");
+			      values = new HashSet();
+
+			      var ovid_map = { 
+				      "lf1.cuni.cz": "charlmed",
+				      "lf2.cuni.cz": "nml25",
+				      "lf3.cuni.cz": "medfac3",
+				      "czp.cuni.cz": "jinoniceclassr",
+				      "etf.cuni.cz": "evangeltheo",
+				      "fhs.cuni.cz": "fhsjinonice",
+				      "fsv.cuni.cz": "socialsci",
+				      "ftvs.cuni.cz": "charlesports",
+				      "faf.cuni.cz": "nml4",
+				      "ff.cuni.cz": "facphiloart",
+				      "htf.cuni.cz": "husitska",
+				      "ktf.cuni.cz": "catholictheo",
+				      "lfhk.cuni.cz": "medhra",
+				      "lfp.cuni.cz": "medplz",
+				      "mff.cuni.cz": "mathphys",
+				      "pedf.cuni.cz": "charledu",
+				      "prf.cuni.cz": "faclaw",
+				      "natur.cuni.cz": "charlesnatural",
+				      "cerge.cuni.cz": "cerge",
+				      "ruk.cuni.cz": "rector",
+				      "default": "charlesuni",
+				      "filter": "(psychology|centrallib|charlmed|nml25|medfac3|jinoniceclassr|evangeltheo|fhsjinonice|socialsci|charlesports|nml4|facphiloart|husitska|catholictheo|medhra|medplz|mathphys|charledu|faclaw|charlesnatural|cerge|rector|charlesuni)",
+				      "prefix": "urn:wkhmr:ovid.institutional.login:"
+			      };
+
+			      var proquest_map = {
+				      "ff.cuni.cz": "facphiloart",
+				      "etf.cuni.cz": "evangeltheo",
+				      "cerge.cuni.cz": "cerge",
+				      "default": "charlesuni",
+				      "filter": "(facphiloart|evangeltheo|cerge|charlesuni)",
+				      "prefix": "urn:wkhmr:ovid.institutional.login:"
+			      };
+	    
+
+			      // special cases for dumb SP
+			      peerId = resolutionContext.getAttributeRecipientID();
+
+			      if("https://shibboleth.ovid.com/entity" == peerId ||
+				 "https://shibboleth-sp.prod.proquest.com/shibboleth" == peerId ||
+				 "http://shibboleth.ebscohost.com" == peerId) {
+
+				      // ---------------------------------------------------
+				      // Ovid, ProQuest, EBSCO 
+				      //   * want to see single value from appropriate map
+				      //   * send value chosen by user (ePE) or some default
+				      // ---------------------------------------------------
+
+ 				      if(typeof(eduPersonEntitlement) != "undefined") {
+					      ents = eduPersonEntitlement.getValues();
+					      for(i = 0; i < ents.size(); i++) {
+						      match = (new RegExp(ovid_map["prefix"])).exec(ents.get(i));
+						      if(match) {
+							      user_ent = ents.get(i);
+							      // eduPersonEntitlement_new.getValues().add(ents.get(i));
+						      }
+					      }
+				      }
+				      // user_ent <- eduPersonEntitlement | grep ovid_map["prefix"]
+
+				      if("https://shibboleth-sp.prod.proquest.com/shibboleth" == peerId) {
+
+					      used_map = proquest_map;
+
+				      } else {
+
+					      used_map = ovid_map;
+
+				      }
+				      
+
+				      if(typeof(user_ent) != "undefined" && (new RegExp(used_map["filter"])).test(user_ent)) {
+					      values.add(new StringAttributeValue(user_ent));
+				      } else {
+					      if(typeof(eduPersonScopedAffiliation) != "undefined") {
+						      found = 0;
+						      for(i=0; i < eduPersonScopedAffiliation.getValues().size(); i++) {
+							      value = eduPersonScopedAffiliation.getValues().get(i);
+							      match = /^(interrupted-student|student|staff|affiliate|member)@(.*)/.exec(value);
+							      if(match) {
+								      domain = match[2];
+								      if(used_map.hasOwnProperty(domain) && (match[1] == "student" || match[1] == "staff")) {
+									      mapped_value = used_map[domain];
+								      } else {
+									      if(found == 0) {
+											mapped_value = used_map["default"];
+									      }
+								      }
+								      found++;
+							      }
+						      }
+						      if(found > 0) {
+							      values.add(new StringAttributeValue(used_map["prefix"] + mapped_value));
+						      }
+					      } else {
+
+                                                      // "external" affiliation entitlement for card holders
+                                                      if(typeof(cuniIdCardNumber) != "undefined") {
+                                                              values.add(new StringAttributeValue("urn:cuni:affiliation:external"));
+                                                      }
+
+					      }
+				      }
+
+
+			      } else {
+
+				      // ---------------------------------------------------------------
+				      // mizar, Orca, Digitool
+				      //   * want to see single entitlement based on primary affiliation
+				      // ---------------------------------------------------------------
+
+				      if("https://www.mizar.cz/shibboleth/cztestfed/sp" == peerId ||
+					 "https://orca.ruk.cuni.cz/shibboleth" == peerId ||
+					 "https://digitool.is.cuni.cz/shibboleth" == peerId) {
+					      if(typeof(eduPersonPrimaryAffiliation) != undefined &&
+						 typeof(eduPersonPrimaryOrgUnitDN) != undefined) {
+						      aff = eduPersonPrimaryAffiliation.getValues().get(0);
+						      dn = eduPersonPrimaryOrgUnitDN.getValues().get(0);
+						      dn = dn.replace("dc=", "");
+						      dn = dn.replace(",", "."); 
+						      values.add(new StringAttributeValue("urn:cuni:affiliation:" + aff + "@" + dn));
+					      }
+
+				      } else {
+					      
+
+
+					      // -----------------------------------------------------------------
+					      // All other SP's
+					      //   * add mapped entitlements
+					      // -----------------------------------------------------------------
+
+
+					      // all values of ePE
+					      if(typeof(eduPersonEntitlement) != "undefined") {
+						      ePE = eduPersonEntitlement.getValues();
+						      for(i = 0; i < ePE.size(); i++) {
+							      values.add(new StringAttributeValue(ePE.get(i)));
+						      }
+					      } 
+
+                                              // handicap
+                                              if(typeof(cuniHandicap) != "undefined") {
+                                                        handicap = cuniHandicap.getValues();
+                                                        for(i = 0; i < handicap.size(); i++) {
+                                                                values.add(new StringAttributeValue("urn:cuni:handicap:" + handicap.get(i)));
+                                                        }
+                                              }
+                                              
+					      
+					      // entitlements based on scoped affiliation
+					      if(typeof(eduPersonScopedAffiliation) != "undefined") {
+						      for(i=0; i < eduPersonScopedAffiliation.getValues().size(); i++) {
+							      value = eduPersonScopedAffiliation.getValues().get(i);
+
+							      // add affiliation
+							      values.add(new StringAttributeValue("urn:cuni:affiliation:" + value));
+
+							      // add library and TCS certificate entitlements
+							      match = /^(student|staff|faculty|employee)@.*/.exec(value);
+							      if(match) {
+								      values.add(new StringAttributeValue("urn:mace:dir:entitlement:common-lib-terms"));
+								      if(typeof(cuniAuthService) == "undefined") {
+									      values.add(new StringAttributeValue("urn:mace:terena.org:tcs:escience-user"));
+									      values.add(new StringAttributeValue("urn:mace:terena.org:tcs:personal-user"));
+								      }
+							      }
+
+							      // add mapped affiliations
+							      match = /^(interrupted-student|student|staff|affiliate)@(.*)/.exec(value);
+							      if(match) {
+								      // add member entitlement
+								      domain = match[2];
+								      values.add(new StringAttributeValue("urn:cuni:affiliation:member@" + domain));
+
+								      // add ovid mapped entitlements
+								      values.add(new StringAttributeValue(ovid_map["prefix"] + ovid_map["default"]));
+								      if(ovid_map.hasOwnProperty(domain) && (match[1] == "student" || match[1] == "staff")) {
+									      values.add(new StringAttributeValue(ovid_map["prefix"] + ovid_map[domain]));
+								      }
+							      }
+
+                                                              // Turnitin entitlement
+							      match = /^(faculty|staff)@.*/.exec(value);
+							      if(match) {
+								      values.add(new StringAttributeValue("http://shibboleth.turnitin.com/instructorEntitlement"));
+							      }
+						      }
+									      
+					      } else {
+
+						      // "external" affiliation entitlement for card holders
+						      if(typeof(cuniIdCardNumber) != "undefined") {
+							      values.add(new StringAttributeValue("urn:cuni:affiliation:external"));
+						      }
+					      }
+					      
+					      
+					      // entitlements base on affiliation to faculty units
+					      if(typeof(cuniScopedAffiliation) != "undefined") {
+						      for(i=0; i < cuniScopedAffiliation.getValues().size(); i++) {
+							      value = cuniScopedAffiliation.getValues().get(i);
+							      values.add(new StringAttributeValue("urn:cuni:affiliation:" + value));
+						      }
+					      }
+					      
+					      // entitlements based on study program
+					      if(typeof(cuniStudyProgram) != "undefined") {
+						      for(i=0; i < cuniStudyProgram.getValues().size(); i++) {
+							      value = cuniStudyProgram.getValues().get(i);
+							      match = /^([^:]*:)/.exec(value);
+							      if(match) {
+								      // value = DigestUtils.md5Hex(match[1]);
+								      value = match[1];
+								      values.add(new StringAttributeValue("urn:cuni:studyprogram:" + value));
+							      }
+						      }
+					      }
+					      
+					      // entitlements based on study subject
+					      if(typeof(cuniStudySubject) != "undefined") {
+						      for(i=0; i < cuniStudySubject.getValues().size(); i++) {
+							      value = cuniStudySubject.getValues().get(i);
+							      match = /^([^:]*:)/.exec(value);
+							      if(match) {
+								      value = match[1];
+								      values.add(new StringAttributeValue("urn:cuni:studysubject:" + value));
+							      }
+						      }
+					      }
+					      
+					      // entitlements base on roles
+					      if(typeof(nsRole) != "undefined") {
+						      for(i=0; i < nsRole.getValues().size(); i++) {
+							      value = nsRole.getValues().get(i);
+							      match = /cn=([^,]*),.*/.exec(value);
+							      if(match) {
+								      role = match[1];
+								      values.add(new StringAttributeValue("urn:cuni:role:" + role));
+							      }
+						      }
+					      }
+					      
+					      // entitlements for alumni
+					      if(typeof(cuniPersonEntitlement) != "undefined") {
+						      for(i=0; i < cuniPersonEntitlement.getValues().size(); i++) {
+							      value = cuniPersonEntitlement.getValues().get(i);
+							      match = /urn:cuni:affiliation:alumn.*/.exec(value);
+							      if(match) {
+								      values.add(new StringAttributeValue(value));
+							      }
+						      }
+					      }
+					      
+					      // entitlement for interrupted students
+					      if(is_interrupted) {
+							values.add(new StringAttributeValue("urn:mace:eduid.cz:affiliation:interrupted-student"));
+					      }
+
+					      // BIG MAGIC HERE
+					      current_values = values.clone();
+					      for(i = current_values.iterator(); i.hasNext(); ) {
+
+						      value = i.next().getValue();
+						
+						      // CERGE "students" and "staff"
+						      if("urn:cuni:role:member@cerge.cuni.cz" == value ||
+							 "urn:cuni:affiliation:member@cerge.cuni.cz" == value ||
+							 "urn:cuni:role:libuser@cerge.cuni.cz" == value) {
+							      values.add(new StringAttributeValue("urn:wkhmr:ovid.institutional.login:cerge"));
+						      }
+
+						      // "Students" of department of psychology and PedF
+						      if("urn:cuni:role:member@psychologie.ff.cuni.cz" == value) {
+							      values.add(new StringAttributeValue("urn:wkhmr:ovid.institutional.login:psychology"));
+						      }
+						      if("urn:cuni:role:member@psychologie.pedf.cuni.cz" == value) {
+							      values.add(new StringAttributeValue("urn:wkhmr:ovid.institutional.login:charledu"));
+						      }
+						      if("urn:cuni:studyprogram:B7701:" == value ||
+							 "urn:cuni:studyprogram:M7701:" == value ||
+							 "urn:cuni:studyprogram:N7701:" == value ||
+							 "urn:cuni:studyprogram:P7701:" == value) {
+							      if(typeof(eduPersonScopedAffiliation) != "undefined") {
+								      if(eduPersonScopedAffiliation.getValues().contains("student@ff.cuni.cz") || 
+									 eduPersonScopedAffiliation.getValues().contains("interrupted-student@ff.cuni.cz")) {
+									      values.add(new StringAttributeValue("urn:wkhmr:ovid.institutional.login:psychology"));
+								      }
+								      if(eduPersonScopedAffiliation.getValues().contains("student@pedf.cuni.cz") ||
+									 eduPersonScopedAffiliation.getValues().contains("interrupted-student@pedf.cuni.cz")) {
+									      values.add(new StringAttributeValue("urn:wkhmr:ovid.institutional.login:charledu"));
+								      }
+								      
+								      
+							      }
+						      }
+
+						      // Central library users 
+						      if("urn:cuni:affiliation:member@czp.cuni.cz" == value ||
+							 "urn:cuni:affiliation:member@fhs.cuni.cz" == value ||
+							 "urn:cuni:studyprogram:B7201:" == value ||
+							 "urn:cuni:studyprogram:M7201:" == value ||
+							 "urn:cuni:studyprogram:N7201:" == value ||
+							 "urn:cuni:studyprogram:P7201:" == value) {
+							      values.add(new StringAttributeValue("urn:wkhmr:ovid.institutional.login:centrallib"));
+						      }
+
+						      // Students attending Jinonice campus
+						      if("urn:cuni:studysubject:6701R008:" == value ||
+							 "urn:cuni:studyprogram:B6701:" == value ||
+							 "urn:cuni:studyprogram:M6701:" == value ||
+							 "urn:cuni:studyprogram:N6701:" == value ||
+							 "urn:cuni:studyprogram:P6701:" == value ||
+							 "urn:cuni:studyprogram:B6732:" == value ||
+							 "urn:cuni:studyprogram:B6705:" == value ||
+							 "urn:cuni:studyprogram:B7508:" == value ||
+							 "urn:cuni:studyprogram:N7508:" == value ||
+							 "urn:cuni:studyprogram:B6731:" == value ||
+							 "urn:cuni:studyprogram:M6731:" == value ||
+							 "urn:cuni:studyprogram:N6731:" == value ||
+							 "urn:cuni:studyprogram:P6731:" == value ||
+							 "urn:cuni:studyprogram:B6734:" == value ||
+							 "urn:cuni:studyprogram:M6734:" == value ||
+							 "urn:cuni:studyprogram:N6734:" == value ||
+							 "urn:cuni:studyprogram:P6734:" == value) {
+							      if(typeof(eduPersonScopedAffiliation) != "undefined" &&
+								 (eduPersonScopedAffiliation.getValues().contains("student@ff.cuni.cz") ||
+								  eduPersonScopedAffiliation.getValues().contains("interrupted-student@ff.cuni.cz"))) {
+								      values.add(new StringAttributeValue("urn:wkhmr:ovid.institutional.login:jinoniceclassr"));
+							      }
+						      }
+					      }
+				      }
+			      }
+
+			      attr.setValues(values);
+			      connectorResults.add(attr);
+
+           // ------------------------------
+           //   cuniPersonScopedAffiliation 
+           // ------------------------------
+
+			      attr = new IdpAttribute("cuniPersonScopedAffiliation");
+			      values = new HashSet();
+			      
+			      if(typeof(cuniScopedAffiliation) != "undefined") {
+				      cPSA = cuniScopedAffiliation.getValues();
+				      for(i = 0; i < cPSA.size(); i++) {
+					      values.add(new StringAttributeValue(cPSA.get(i)));
+				      }
+			      }
+
+			      if(typeof(nsRole) != "undefined") {
+				      for(i=0; i < nsRole.getValues().size(); i++) {
+					      value = nsRole.getValues().get(i);
+
+					      match = /cn=(member@[^,]*),.*/.exec(value);
+					      if(match) {
+						      role = match[1];
+						      values.add(new StringAttributeValue(role));
+					      }
+					      match = /cn=(libuser@[^,]*),.*/.exec(value);
+					      if(match) {
+						      role = match[1];
+						      values.add(new StringAttributeValue(role));
+					      }
+				      }
+			      }
+			      
+			      attr.setValues(values);
+			      connectorResults.add(attr);
+
+           // ------------------------------
+           //   mefaPerson
+           // ------------------------------
+
+			      attr = new IdpAttribute("mefaPerson");
+			      values = new HashSet();
+
+			      mefanet = false;
+			      
+			      if(typeof(nsRole) != "undefined") {
+				      for(i=0; i < nsRole.getValues().size(); i++) {
+					      value = nsRole.getValues().get(i);
+					      match = /cn=mefanet@(.*\.cuni\.cz),.*/.exec(value);
+					      if(match) {
+						      values.add(new StringAttributeValue(match[1]));
+						      mefanet = true;
+					      }
+				      }
+			      }
+			      if(typeof(eduPersonScopedAffiliation) != "undefined") {
+				      for(i=0; i < eduPersonScopedAffiliation.getValues().size(); i++) {
+					      value = eduPersonScopedAffiliation.getValues().get(i);
+					      if(value.indexOf("staff") >= 0 || value.indexOf("student") >= 0) {
+						      if(value.indexOf("lf1.cuni.cz") > 0) {
+							      values.add(new StringAttributeValue("lf1.cuni.cz"));
+							      mefanet = true;
+						      }
+						      if(value.indexOf("lf2.cuni.cz") > 0) {
+							      values.add(new StringAttributeValue("lf2.cuni.cz"));
+							      mefanet = true;
+						      }
+						      if(value.indexOf("lf3.cuni.cz") > 0) {
+							      values.add(new StringAttributeValue("lf3.cuni.cz"));
+							      mefanet = true;
+						      }
+						      if(value.indexOf("lfhk.cuni.cz") > 0) {
+							      values.add(new StringAttributeValue("lfhk.cuni.cz"));
+							      mefanet = true;
+						      }
+						      if(value.indexOf("lfp.cuni.cz") > 0) {
+							      values.add(new StringAttributeValue("lfp.cuni.cz"));
+							      mefanet = true;
+						      }
+					      }
+				      }
+			      }
+
+			      if(!mefanet) {
+				      values.add(new StringAttributeValue("false"));
+			      }
+			
+			      attr.setValues(values);
+			      connectorResults.add(attr);
+
+           // ------------------------------
+           //   authorizedMail
+           // ------------------------------
+
+			      attr = new IdpAttribute("authorizedMail");
+			      values = new HashSet();
+
+			      
+			      if(typeof(cuniAuthorizedMail) != "undefined" && typeof(cuniMailVerificationExpiration) != "undefined") {
+				      value = cuniMailVerificationExpiration.getValues().get(0); 
+				      match = /(\d\d\d\d)(\d\d)(\d\d)\d\d\d\d\d\dZ/.exec(value);
+				      if(match != null) {
+					      expiration = new Date(match[1], match[2], match[3]);
+					      now = new Date();
+					      if(now < expiration) {
+						      values.addAll(cuniAuthorizedMail.getNativeAttribute().getValues());
+						      //for(i=0; i < cuniAuthorizedMail.getValues().size(); i++) {
+						      //      values.add(new StringAttributeValue(cuniAuthorizedMail.getValues().get(i)));
+						      //}
+					      }
+				      }
+			      }
+
+			      attr.setValues(values);
+			      connectorResults.add(attr);
+
+           // ------------------------------
+           //   authenticationLevel
+           // ------------------------------
+
+			      attr = new IdpAttribute("authenticationLevel");
+			      values = new HashSet();
+
+			      
+			      if(typeof(cuniAuthService) != "undefined") {
+				      values.add(new StringAttributeValue("urn:cuni:authenticationlevel:low"));
+			      } else {
+				      values.add(new StringAttributeValue("urn:cuni:authenticationlevel:basic"));
+			      }
+
+			      attr.setValues(values);
+			      connectorResults.add(attr);
+
+           // ------------------------------
+           //  googlePrincipal 
+           // ------------------------------
+
+                              attr = new IdpAttribute("googlePrincipal");
+                              values = new HashSet();
+
+                              peerId = resolutionContext.getAttributeRecipientID();
+
+                              if("google.com/a/g.cuni.cz" == peerId) {
+                                if(typeof(cuniPersonalId) != undefined) {
+                                                values.add(new ScopedAttributeValue(cuniPersonalId.getValues().get(0), "g.cuni.cz"));
+                                }
+                              } else if("google.com/a/gs.mff.cuni.cz" == peerId) {
+                                        if(typeof(cuniPrincipalName) != undefined) {
+                                                values.add(new ScopedAttributeValue(cuniPrincipalName.getValues().get(0).toLowerCase(), "gs.mff.cuni.cz"));
+                                        }
+                              } else if("google.com/a/ktf.cuni.cz" == peerId) {
+                                        if(typeof(cuniPrincipalName) != undefined) {
+                                                values.add(new ScopedAttributeValue(cuniPrincipalName.getValues().get(0).toLowerCase(), "ktf.cuni.cz"));
+                                        }
+                              }
+
+                              attr.setValues(values);
+                              connectorResults.add(attr);
+
+           // ------------------------------
+           //  eduPersonAssurance
+           // ------------------------------
+
+                              attr = new IdpAttribute("eduPersonAssurance");
+                              values = new HashSet();
+
+                              if(typeof(eduPersonAffiliation) != "undefined") {
+                                    if(eduPersonAffiliation.getValues().contains("student") ||
+                                       eduPersonAffiliation.getValues().contains("staff")) {
+                                           values.add(new StringAttributeValue("https://refeds.org/assurance/IAP/high"));
+                                           values.add(new StringAttributeValue("https://refeds.org/assurance/profile/espresso"));
+                                    }
+                              }
+
+                              attr.setValues(values);
+                              connectorResults.add(attr);
+
+           ]]>
+
+        </Script>
+    </DataConnector>
+
+
+</AttributeResolver>

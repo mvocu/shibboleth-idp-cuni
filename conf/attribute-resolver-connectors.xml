@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is an EXAMPLE configuration file containing some example attributes
+    based on some commonly used approaches when LDAP is the principal data source.
+     
+    Not all attribute definitions or data connectors are demonstrated, but some
+    LDAP attributes common to Shibboleth deployments (and some not so common) are
+    included.
+
+    This example is in no way usable as a substitute for reading the documentation.    
+-->
+<AttributeResolver
+        xmlns="urn:mace:shibboleth:2.0:resolver"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="urn:mace:shibboleth:2.0:resolver http://shibboleth.net/schema/idp/shibboleth-attribute-resolver.xsd">
+
+
+    <!-- ========================================== -->
+    <!--      Data Connectors                       -->
+    <!-- ========================================== -->
+
+    <!-- Static data connector -->
+    <!-- 
+        o
+        eduPersonOrgDN
+        schacHomeOrg
+        schacHomeOrgType
+        eduPersonAssurance
+    -->
+    <DataConnector id="staticAttributes" xsi:type="Static"
+	exportAttributes="o eduPersonOrgDN schacHomeOrg schacHomeOrgType">
+
+        <Attribute id="o">
+            <Value>Charles University</Value>
+        </Attribute>
+        <Attribute id="eduPersonOrgDN">
+            <Value>o=Charles University,dc=cuni,dc=cz</Value>
+        </Attribute>
+        <Attribute id="eduPersonAssurance">
+            <Value>https://refeds.org/assurance/ID/unique</Value>
+            <Value>https://refeds.org/assurance/ID/eppn-unique-no-reassign</Value>
+            <Value>https://refeds.org/assurance/IAP/low</Value>
+            <Value>https://refeds.org/assurance/IAP/medium</Value>
+            <!-- assigned only to specific user categories -->
+            <!-- <Value>https://refeds.org/assurance/IAP/high</Value> -->
+            <Value>https://refeds.org/assurance/ATP/ePA-1m</Value>
+            <Value>https://refeds.org/assurance/ATP/ePA-1d</Value>
+            <Value>https://refeds.org/assurance/profile/capuccino</Value>
+            <!-- assigned only to specific user categories -->
+            <!-- <Value>https://refeds.org/assurance/profile/espresso</Value> -->
+        </Attribute>
+        <Attribute id="schacHomeOrg">
+            <Value>cuni.cz</Value>
+        </Attribute>
+        <Attribute id="schacHomeOrgType">
+            <Value>urn:mace:terena.org:schac:homeOrganizationType:int:university</Value>
+        </Attribute>
+    </DataConnector>
+
+
+    <!-- StoredID (targetedID) connector -->
+    <!-- -->
+    <DataConnector xsi:type="StoredId"
+                            id="storedIDConnector"
+                            generatedAttributeID="storedID"
+                            salt="Pove+d se mi b8bovi4ko">
+                         <!--   salt="%{idp.persistentId.salt:undefined}"> -->
+        <BeanManagedConnection>shibboleth.PersistentIdDataSource</BeanManagedConnection>
+	<InputDataConnector ref="cuniLDAP" attributeNames="cuniPersonalId" />
+    </DataConnector>
+
+    <!-- CUNI LDAP Connector -->
+    <DataConnector id="cuniLDAP" xsi:type="LDAPDirectory"
+        ldapURL="%{idp.attribute.resolver.LDAP.ldapURL}"
+        baseDN="%{idp.attribute.resolver.LDAP.baseDN}" 
+        principal="%{idp.attribute.resolver.LDAP.bindDN}"
+        principalCredential="%{idp.attribute.resolver.LDAP.bindDNCredential}"
+        useStartTLS="%{idp.attribute.resolver.LDAP.useStartTLS:true}"
+        connectTimeout="%{idp.attribute.resolver.LDAP.connectTimeout}"
+        trustFile="%{idp.attribute.resolver.LDAP.trustCertificates}"
+        responseTimeout="%{idp.attribute.resolver.LDAP.responseTimeout}"
+        connectionStrategy="%{idp.attribute.resolver.LDAP.connectionStrategy}"
+        noResultIsError="false"
+        multipleResultsIsError="true"
+        excludeResolutionPhases="c14n/attribute"
+        exportAttributes="cn givenName sn mail telephoneNumber preferredLanguage eduPersonNickname eduPersonOrgUnitDN eduPersonPrimaryAffiliation eduPersonPrimaryOrgUnitDN cuniPersonalId cuniScopedAffiliation cuniPrincipalName cuniBirthDate">
+        <FilterTemplate>
+            <![CDATA[
+                %{idp.attribute.resolver.LDAP.searchFilter}
+            ]]>
+        </FilterTemplate>
+        <ConnectionPool
+            minPoolSize="%{idp.pool.LDAP.minSize:3}"
+            maxPoolSize="%{idp.pool.LDAP.maxSize:10}"
+            blockWaitTime="%{idp.pool.LDAP.blockWaitTime:PT3S}"
+            validatePeriodically="%{idp.pool.LDAP.validatePeriodically:true}"
+            validateTimerPeriod="%{idp.pool.LDAP.validatePeriod:PT5M}"
+            validateDN="%{idp.pool.LDAP.validateDN:}"
+            validateOnCheckout="%{idp.pool.LDAP.validateOnCheckout:false}"
+            validateFilter="%{idp.pool.LDAP.validateFilter:(objectClass=*)}"
+            prunePeriod="%{idp.pool.LDAP.prunePeriod:PT5M}"
+            expirationTime="%{idp.pool.LDAP.idleTime:PT10M}"/>
+    </DataConnector>
+
+    <DataConnector id="passthroughAttributes" xsi:type="Subject" exportAttributes="user authenticationMethod" />
+
+</AttributeResolver>

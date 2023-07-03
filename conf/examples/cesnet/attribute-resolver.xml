@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Doporučený attribute-resolver.xml pro Shibboleth IdP v rámci eduID.cz
+  Jan Oppolzer <jan.oppolzer@cesnet.cz>
+
+  2017-04-07: První verze.
+  2018-11-27: Aktualizace pro Shibboleth IdP 3.4.0+.
+  2020-01-15: Odebrání dependencyOnly="true" u atributu `uid' kvůli persistent NameID.
+  2020-03-27: Aktualizace pro Shibboleth IdP 4.0.0.
+  2021-06-04: Aktualizace pro Shibboleth IdP 4.1.2.
+  2021-12-16: Přidány atributy samlPairwiseID a samlSubjectID.
+  2022-03-17: Aktualizace atributu eduroamUID.
+-->
+
+<AttributeResolver
+    xmlns="urn:mace:shibboleth:2.0:resolver"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:mace:shibboleth:2.0:resolver http://shibboleth.net/schema/idp/shibboleth-attribute-resolver.xsd">
+
+    <!-- ========================================== -->
+    <!--      Attribute Definitions                 -->
+    <!-- ========================================== -->
+
+    <!-- authMail -->
+    <AttributeDefinition xsi:type="Simple" id="authMail">
+        <InputDataConnector ref="myLDAP" attributeNames="authorisedMail"/>
+    </AttributeDefinition>
+
+    <!-- cesnetEmplID -->
+    <!--
+        exported using DataConnector[exportAttributes]
+        defined within conf/attributes/cesnetAttributes.xml
+    -->
+
+    <!-- cn -->
+    <AttributeDefinition xsi:type="Simple" id="cn">
+        <InputDataConnector ref="myLDAP" attributeNames="cn"/>
+    </AttributeDefinition>
+    <!--
+    <AttributeDefinition xsi:type="Template" id="cn">
+        <InputAttributeDefinition ref="givenName"/>
+        <InputAttributeDefinition ref="sn"/>
+        <Template>${givenName} ${sn}</Template>
+    </AttributeDefinition>
+    -->
+
+    <!-- commonNameASCII -->
+    <AttributeDefinition xsi:type="Simple" id="commonNameASCII">
+        <InputDataConnector ref="myLDAP" attributeNames="cn;lang-en"/>
+    </AttributeDefinition>
+    <!--
+    <AttributeDefinition xsi:type="ScriptedAttribute" id="commonNameASCII">
+        <InputAttributeDefinition ref="cn"/>
+        <Script>
+        <![CDATA[
+            load("nashorn:mozilla_compat.js");                                                                      
+     
+            importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+            importPackage(Packages.java.lang);
+            importPackage(Packages.java.text);
+     
+            if(cn.getValues().size() > 0) {
+                originalValue = cn.getValues().get(0);
+                asciiValue = Normalizer.normalize(originalValue, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+                commonNameASCII.getValues().add(asciiValue);
+            }
+        ]]>
+        </Script>
+    </AttributeDefinition>
+    -->
+
+    <!-- displayName -->
+    <AttributeDefinition xsi:type="Simple" id="displayName">
+        <InputAttributeDefinition ref="cn" />
+    </AttributeDefinition>
+
+    <!-- eduPersonAffiliation -->
+    <AttributeDefinition xsi:type="Simple" id="eduPersonAffiliation">
+        <InputDataConnector ref="staticAttributes" attributeNames="eduPersonAffiliation"/>
+    </AttributeDefinition>
+    <!--
+    <AttributeDefinition xsi:type="ScriptedAttribute" id="eduPersonAffiliation">
+        <InputAttributeDefinition ref="isMemberOf" />
+        <Script>
+            <![CDATA[
+                if (isMemberOf.getValues().contains("employees") ||
+                    isMemberOf.getValues().contains("employees - external") ||
+                    isMemberOf.getValues().contains("employees - part time")) {
+                        eduPersonAffiliation.getValues().add("member");
+                }
+                if (isMemberOf.getValues().contains("employees")) {
+                    eduPersonAffiliation.getValues().add("employee");
+                }
+            ]]>
+        </Script>
+    </AttributeDefinition>
+    -->
+
+    <!-- eduPersonEntitlement -->
+    <AttributeDefinition xsi:type="Simple" id="eduPersonEntitlement">
+        <InputDataConnector ref="staticAttributes" attributeNames="eduPersonEntitlement"/>
+    </AttributeDefinition>
+    <!--
+    <AttributeDefinition xsi:type="ScriptedAttribute" id="eduPersonEntitlement">
+        <InputAttributeDefinition ref="idVerified" />
+        <InputAttributeDefinition ref="tcsPersonal" />
+        <InputAttributeDefinition ref="tcsPersonalEScience" />
+        <InputAttributeDefinition ref="openVPNDisabled" />
+        <InputAttributeDefinition ref="isMemberOf" />
+        <Script>
+            <![CDATA[
+                if (typeof idVerified != "undefined" && idVerified != null && idVerified.getValues().size()) {
+
+                    if (typeof tcsPersonal != "undefined" && tcsPersonal.getValues().size() && tcsPersonal.getValues().contains("TRUE")) {
+                        eduPersonEntitlement.getValues().add("urn:mace:terena.org:tcs:personal-user");
+                    }
+
+                    if (typeof tcsPersonalEScience != "undefined" && tcsPersonalEScience.getValues().size() && tcsPersonalEScience.getValues().contains("TRUE")) {
+                        eduPersonEntitlement.getValues().add("urn:mace:terena.org:tcs:escience-user");
+                    }
+
+                }
+
+                if (typeof isMemberOf != "undefined" && isMemberOf != null) {
+
+                    for (i = 0; isMemberOf != null && i < isMemberOf.getValues().size(); i++) {
+
+                        value = isMemberOf.getValues().get(i);
+
+                        if (value.contains("tcs personal manager") > 0) {
+                            eduPersonEntitlement.getValues().add("urn:mace:terena.org:tcs:personal-admin");
+                            eduPersonEntitlement.getValues().add("urn:mace:terena.org:tcs:escience-admin");
+                        }
+
+                        if (value.contains("employees") > 0) {
+                            if (typeof openVPNDisabled != "undefined" && openVPNDisabled != null && openVPNDisabled.getValues().size()) {
+                                //logger.debug("openVPNDisabled: " + openVPNDisabled.getValues());
+                            } else {
+                                eduPersonEntitlement.getValues().add("urn:mace:cesnet.cz:openvpn-user");
+                            }
+                        }
+
+                    }
+
+                }
+            ]]>
+        </Script>
+    </AttributeDefinition>
+    -->
+
+    <!-- eduPersonPrincipalName -->
+    <AttributeDefinition xsi:type="Scoped" id="eduPersonPrincipalName" scope="%{idp.scope}">
+        <InputDataConnector ref="myLDAP" attributeNames="uid"/>
+    </AttributeDefinition>
+
+    <!-- eduPersonScopedAffiliation -->
+    <AttributeDefinition xsi:type="Scoped" id="eduPersonScopedAffiliation" scope="%{idp.scope}">
+        <InputAttributeDefinition ref="eduPersonAffiliation"/>
+    </AttributeDefinition>
+
+    <!-- eduPersonTargetedID -->
+    <AttributeDefinition xsi:type="SAML2NameID" id="eduPersonTargetedID" nameIdFormat="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">
+        <InputDataConnector ref="myStoredId" attributeNames="storedId" />
+        <AttributeEncoder xsi:type="SAML2XMLObject" name="urn:oid:1.3.6.1.4.1.5923.1.1.1.10"/>
+    </AttributeDefinition>
+
+    <!-- eduPersonUniqueId -->
+    <AttributeDefinition xsi:type="Scoped" id="eduPersonUniqueId" scope="%{idp.scope}">
+        <InputDataConnector ref="myLDAP" attributeNames="tcsPersonalID"/>
+    </AttributeDefinition>
+
+    <!-- eduroamUID -->
+    <!--
+    <AttributeDefinition xsi:type="Mapped" id="eduroamUID">
+        <InputAttributeDefinition ref="uid" />
+        <ValueMap>
+            <ReturnValue>$1@%{idp.scope}</ReturnValue>
+            <SourceValue>(.+)</SourceValue>
+        </ValueMap>
+        <ValueMap>
+            <ReturnValue>$1@cesnet.eu</ReturnValue>
+            <SourceValue>(.+)</SourceValue>
+        </ValueMap>
+    </AttributeDefinition>
+    -->
+
+    <!-- givenName -->
+    <AttributeDefinition xsi:type="Simple" id="givenName">
+        <InputDataConnector ref="myLDAP" attributeNames="givenName"/>
+    </AttributeDefinition>
+
+    <!-- groupCn -->
+    <!--
+    <AttributeDefinition xsi:type="Simple" id="groupCn" dependencyOnly="true">
+        <InputDataConnector ref="myLDAPgroups" attributeNames="cn"/>
+    </AttributeDefinition>
+    -->
+
+    <!-- idVerified -->
+    <!--
+    <AttributeDefinition xsi:type="Simple" id="idVerified" dependencyOnly="true">
+        <InputDataConnector ref="myLDAP" attributeNames="idVerified" />
+    </AttributeDefinition>
+    -->
+
+    <!-- ipPhone -->
+    <!--
+    <AttributeDefinition xsi:type="Simple" id="ipPhone" dependencyOnly="true">
+        <InputDataConnector ref="myLDAP" attributeNames="ipPhone"/>
+    </AttributeDefinition>
+    -->
+
+    <!-- isMemberOf -->
+    <!--
+    <AttributeDefinition xsi:type="ScriptedAttribute" id="isMemberOf">
+        <InputAttributeDefinition ref="groupCn"/>
+        <Script>
+            <![CDATA[
+                if (groupCn != null) {
+                    for (i = 0; i < groupCn.getValues().size(); i++) {
+                        isMemberOf.getValues().add(groupCn.getValues().get(i).toLowerCase());
+                    }
+                }
+            ]]>
+        </Script>
+    </AttributeDefinition>
+    -->
+
+    <!-- mail -->
+    <AttributeDefinition xsi:type="Simple" id="mail">
+        <InputDataConnector ref="myLDAP" attributeNames="preferedMail"/>
+    </AttributeDefinition>
+
+    <!-- o -->
+    <AttributeDefinition xsi:type="Simple" id="o">
+        <InputDataConnector ref="staticAttributes" attributeNames="o"/>
+    </AttributeDefinition>
+
+    <!-- openVPNDisabled -->
+    <!--
+    <AttributeDefinition xsi:type="Simple" id="openVPNDisabled" dependencyOnly="true">
+        <InputDataConnector ref="myLDAP" attributeNames="openVPNDisabled" />
+    </AttributeDefinition>
+    -->
+
+    <!-- ou -->
+    <!--
+    <AttributeDefinition xsi:type="Simple" id="ou">
+        <InputDataConnector ref="myLDAPou" attributeNames="description"/>
+    </AttributeDefinition>
+    -->
+
+    <!-- passwordExpiration -->
+    <!--
+    <AttributeDefinition xsi:type="Simple" id="passwordExpiration">
+        <InputDataConnector ref="myLDAP" attributeNames="passwordExpirationTime"/>
+    </AttributeDefinition>
+    -->
+    
+    <!-- samlPairwiseID-->
+    <AttributeDefinition xsi:type="Scoped" id="samlPairwiseID" scope="%{idp.scope}">
+        <InputDataConnector ref="computed" attributeNames="computedId"/>
+    </AttributeDefinition>
+
+    <!-- samlSubjectHash -->
+    <AttributeDefinition xsi:type="ScriptedAttribute" id="samlSubjectHash" dependencyOnly="true">
+        <InputAttributeDefinition ref="unstructuredName"/>
+        <Script>
+            <![CDATA[
+                if (typeof unstructuredName != "undefined" && unstructuredName != "null" && unstructuredName.getValues().size()) {
+                    var digestUtils = Java.type("org.apache.commons.codec.digest.DigestUtils");
+                    var saltedHash = digestUtils.sha256Hex(unstructuredName.getValues().get(0) + "%{idp.persistentId.salt}");
+                    samlSubjectHash.addValue(saltedHash);
+                }
+            ]]>
+        </Script>
+    </AttributeDefinition>
+
+    <!-- samlSubjectID-->
+    <AttributeDefinition xsi:type="Scoped" id="samlSubjectID" scope="%{idp.scope}">
+        <InputAttributeDefinition ref="samlSubjectHash"/>
+    </AttributeDefinition>
+    
+    <!-- schacHomeOrganization -->
+    <AttributeDefinition xsi:type="Simple" id="schacHomeOrganization">
+        <InputDataConnector ref="staticAttributes" attributeNames="schacHomeOrganization"/>
+    </AttributeDefinition>
+    
+    <!-- sn -->
+    <AttributeDefinition xsi:type="Simple" id="sn">
+        <InputDataConnector ref="myLDAP" attributeNames="sn"/>
+    </AttributeDefinition>
+
+    <!-- tcsPersonal -->
+    <!--
+    <AttributeDefinition xsi:type="Simple" id="tcsPersonal" dependencyOnly="true">
+        <InputDataConnector ref="myLDAP" attributeNames="tcsPersonal"/>
+    </AttributeDefinition>
+    -->
+
+    <!-- tcsPersonalEScience -->
+    <!--
+    <AttributeDefinition xsi:type="Simple" id="tcsPersonalEScience" dependencyOnly="true">
+        <InputDataConnector ref="myLDAP" attributeNames="tcsPersonalEScience" />
+    </AttributeDefinition>
+    -->
+
+    <!-- telephoneNumber -->
+    <AttributeDefinition xsi:type="Simple" id="telephoneNumber">
+        <InputDataConnector ref="myLDAP" attributeNames="telephoneNumber"/>
+    </AttributeDefinition>
+    <!--
+    <AttributeDefinition xsi:type="ScriptedAttribute" id="telephoneNumber">
+        <InputAttributeDefinition ref="ipPhone"/>
+        <InputDataConnector ref="myLDAP" attributeNames="telephoneNumber"/>
+        <Script>
+            <![CDATA[
+                if (ipPhone != null) {
+                    telephoneNumber.getValues().addAll(ipPhone.getValues());
+                }
+            ]]>
+        </Script>
+    </AttributeDefinition>
+    -->
+
+    <!-- uid -->
+    <AttributeDefinition xsi:type="Simple" id="uid">
+        <InputDataConnector ref="myLDAP" attributeNames="uid"/>
+    </AttributeDefinition>
+
+    <!-- unstructuredName -->
+    <AttributeDefinition xsi:type="Simple" id="unstructuredName">
+        <InputDataConnector ref="myLDAP" attributeNames="tcsPersonalID"/>
+    </AttributeDefinition>
+
+    <!-- ========================================== -->
+    <!--      Data Connectors                       -->
+    <!-- ========================================== -->
+
+    <!-- Static Connector -->
+    <DataConnector id="staticAttributes" xsi:type="Static">
+
+        <Attribute id="eduPersonAffiliation">
+            <Value>member</Value>
+            <Value>employee</Value>
+        </Attribute>
+
+        <Attribute id="eduPersonEntitlement">
+            <Value>example-entitlement1</Value>
+            <Value>example-entitlement2</Value>
+        </Attribute>
+
+        <Attribute id="o">
+            <Value>EXAMPLE</Value>
+        </Attribute>
+
+        <Attribute id="schacHomeOrganization">
+            <Value>%{idp.scope}</Value>
+        </Attribute>
+
+    </DataConnector>
+
+    <!-- LDAP Connector -->
+    <!-- exportAttributes="cesnetEmplID" -->
+    <DataConnector id="myLDAP" xsi:type="LDAPDirectory"
+        ldapURL="%{idp.attribute.resolver.LDAP.ldapURL}"
+        baseDN="%{idp.attribute.resolver.LDAP.baseDN}" 
+        principal="%{idp.attribute.resolver.LDAP.bindDN}"
+        principalCredential="%{idp.attribute.resolver.LDAP.bindDNCredential}"
+        useStartTLS="%{idp.attribute.resolver.LDAP.useStartTLS:true}"
+        connectTimeout="%{idp.attribute.resolver.LDAP.connectTimeout}"
+        trustFile="%{idp.attribute.resolver.LDAP.trustCertificates}"
+        responseTimeout="%{idp.attribute.resolver.LDAP.responseTimeout}"
+        connectionStrategy="%{idp.attribute.resolver.LDAP.connectionStrategy}"
+        noResultIsError="true"
+        multipleResultsIsError="true"
+        excludeResolutionPhases="c14n/attribute">
+        <FilterTemplate>
+            <![CDATA[
+                %{idp.attribute.resolver.LDAP.searchFilter}
+            ]]>
+        </FilterTemplate>
+        <ConnectionPool
+            minPoolSize="%{idp.pool.LDAP.minSize:3}"
+            maxPoolSize="%{idp.pool.LDAP.maxSize:10}"
+            blockWaitTime="%{idp.pool.LDAP.blockWaitTime:PT3S}"
+            validatePeriodically="%{idp.pool.LDAP.validatePeriodically:true}"
+            validateTimerPeriod="%{idp.pool.LDAP.validatePeriod:PT5M}"
+            validateDN="%{idp.pool.LDAP.validateDN:}"
+            validateFilter="%{idp.pool.LDAP.validateFilter:(objectClass=*)}"
+            expirationTime="%{idp.pool.LDAP.idleTime:PT10M}"/>
+    </DataConnector>
+
+    <!-- LDAP Connector - groupCn attribute -->
+    <!--
+    <DataConnector id="myLDAPgroups" xsi:type="LDAPDirectory"
+        ldapURL="%{idp.attribute.resolver.LDAP.ldapURL}"
+        baseDN="%{idp.attribute.resolver.LDAP.baseDNgroups}" 
+        principal="%{idp.attribute.resolver.LDAP.bindDN}"
+        principalCredential="%{idp.attribute.resolver.LDAP.bindDNCredential}"
+        useStartTLS="%{idp.attribute.resolver.LDAP.useStartTLS:true}"
+        connectTimeout="%{idp.attribute.resolver.LDAP.connectTimeout}"
+        trustFile="%{idp.attribute.resolver.LDAP.trustCertificates}"
+        responseTimeout="%{idp.attribute.resolver.LDAP.responseTimeout}"
+        connectionStrategy="%{idp.attribute.resolver.LDAP.connectionStrategy}"
+        maxResultSize="100">
+        <FilterTemplate>
+            <![CDATA[
+                %{idp.attribute.resolver.LDAP.searchFilterGroups}
+            ]]>
+        </FilterTemplate>
+        <ConnectionPool
+            minPoolSize="%{idp.pool.LDAP.minSize:3}"
+            maxPoolSize="%{idp.pool.LDAP.maxSize:10}"
+            blockWaitTime="%{idp.pool.LDAP.blockWaitTime:PT3S}"
+            validatePeriodically="%{idp.pool.LDAP.validatePeriodically:true}"
+            validateTimerPeriod="%{idp.pool.LDAP.validatePeriod:PT5M}"
+            validateDN="%{idp.pool.LDAP.validateDN:}"
+            validateFilter="%{idp.pool.LDAP.validateFilter:(objectClass=*)}"
+            expirationTime="%{idp.pool.LDAP.idleTime:PT10M}"/>
+    </DataConnector>
+    -->
+
+    <!-- LDAP Connector - ou attribute -->
+    <!--
+    <DataConnector id="myLDAPou" xsi:type="LDAPDirectory"
+        ldapURL="%{idp.attribute.resolver.LDAP.ldapURL}"
+        baseDN="%{idp.attribute.resolver.LDAP.baseDNou}" 
+        principal="%{idp.attribute.resolver.LDAP.bindDN}"
+        principalCredential="%{idp.attribute.resolver.LDAP.bindDNCredential}"
+        useStartTLS="%{idp.attribute.resolver.LDAP.useStartTLS:true}"
+        connectTimeout="%{idp.attribute.resolver.LDAP.connectTimeout}"
+        trustFile="%{idp.attribute.resolver.LDAP.trustCertificates}"
+        responseTimeout="%{idp.attribute.resolver.LDAP.responseTimeout}"
+        connectionStrategy="%{idp.attribute.resolver.LDAP.connectionStrategy}"
+        maxResultSize="10">
+        <FilterTemplate>
+            <![CDATA[
+                (&(|(cn=7*)(cn=9*))(uniqueMember=uid=$resolutionContext.principal,ou=People,dc=cesnet,dc=cz))
+            ]]>
+        </FilterTemplate>
+        <ConnectionPool
+            minPoolSize="%{idp.pool.LDAP.minSize:3}"
+            maxPoolSize="%{idp.pool.LDAP.maxSize:10}"
+            blockWaitTime="%{idp.pool.LDAP.blockWaitTime:PT3S}"
+            validatePeriodically="%{idp.pool.LDAP.validatePeriodically:true}"
+            validateTimerPeriod="%{idp.pool.LDAP.validatePeriod:PT5M}"
+            validateDN="%{idp.pool.LDAP.validateDN:}"
+            validateFilter="%{idp.pool.LDAP.validateFilter:(objectClass=*)}"
+            expirationTime="%{idp.pool.LDAP.idleTime:PT10M}"/>
+    </DataConnector>
+    -->
+
+    <!-- StoredID Data Connector -->
+    <DataConnector id="myStoredId"
+        xsi:type="StoredId"
+        generatedAttributeID="storedId"
+        salt="%{idp.persistentId.salt}"
+        queryTimeout="0">
+        <InputAttributeDefinition ref="%{idp.persistentId.sourceAttribute}"/>
+        <BeanManagedConnection>shibboleth.MySQLDataSource</BeanManagedConnection>
+    </DataConnector>
+
+    <DataConnector id="computed"
+        xsi:type="ComputedId"
+        excludeResolutionPhases="c14n/attribute"
+        generatedAttributeID="computedId"
+        salt="%{idp.persistentId.salt}"
+        algorithm="%{idp.persistentId.algorithm:SHA}"
+        encoding="%{idp.persistentId.encoding:BASE32}">
+        <InputAttributeDefinition ref="unstructuredName"/>
+    </DataConnector>
+
+</AttributeResolver>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+                           
+       default-init-method="initialize"
+       default-destroy-method="destroy">
+       
+    <bean parent="shibboleth.TranscodingRuleLoader">
+    <constructor-arg>
+    <list>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">authMail</prop>
+                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="saml2.name">urn:oid:1.2.840.113549.1.9.1</prop>
+                    <prop key="displayName.en">Authorized e-mail</prop>
+                    <prop key="displayName.cs">Autorizovaný e-mail</prop>
+                    <prop key="description.en">Organizational authorized e-mail</prop>
+                    <prop key="description.cs">Organizací autorizovaný e-mail</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">cesnetEmplID</prop>
+                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="saml2.name">https://whoami.cesnet.cz/attribute-def/cesnetEmplID</prop>
+                    <prop key="displayName.en">Employee number</prop>
+                    <prop key="displayName.cs">Číslo zaměstnance</prop>
+                    <prop key="description.en">Organizational employee number</prop>
+                    <prop key="description.cs">Identifikační číslo zaměstnance v organizaci</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">commonNameASCII</prop>
+                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="saml2.name">http://eduid.cz/attributes/commonName#ASCII</prop>
+                    <prop key="displayName.en">Common name without diacritics</prop>
+                    <prop key="displayName.cs">Celé jméno bez diakritiky</prop>
+                    <prop key="description.en">Full name without of any diacritics symbols</prop>
+                    <prop key="description.cs">Celé jméno bez diakritických symbolů</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">eduroamUID</prop>
+                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="saml2.name">http://eduroam.cz/attributes/eduroamUID</prop>
+                    <prop key="displayName.en">eduroam identifier</prop>
+                    <prop key="displayName.cs">eduroam identifikátor</prop>
+                    <prop key="description.en">Username for eduroam</prop>
+                    <prop key="description.cs">Uživatelské jméno pro eduroam</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">isMemberOf</prop>
+                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="saml2.name">https://whoami.cesnet.cz/attribute-def/isMemberOf</prop>
+                    <prop key="displayName.en">Group membership</prop>
+                    <prop key="displayName.cs">Členství ve skupinách</prop>
+                    <prop key="description.en">A list of groups the user is member of</prop>
+                    <prop key="description.cs">Seznam skupin, kterých je uživatel členem</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">unstructuredName</prop>
+                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="saml2.name">urn:oid:1.2.840.113549.1.9.2</prop>
+                    <prop key="displayName.en">Unique persistent ID</prop>
+                    <prop key="displayName.cs">Unikátní persistentní ID</prop>
+                    <prop key="description.en">Unique persistent non-reassignable ID</prop>
+                    <prop key="description.cs">Unikátní persistentní nerecyklovatelné ID</prop>
+                </props>
+            </property>
+        </bean>
+
+    </list>
+    </constructor-arg>
+    </bean>
+    
+</beans>
+

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MetadataProvider id="ShibbolethMetadata" xsi:type="ChainingMetadataProvider"
+    xmlns="urn:mace:shibboleth:2.0:metadata"
+    xmlns:security="urn:mace:shibboleth:2.0:security"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:ds11="http://www.w3.org/2009/xmldsig11#"
+    xmlns:enc="http://www.w3.org/2001/04/xmlenc#"
+    xmlns:enc11="http://www.w3.org/2009/xmlenc11#"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:mace:shibboleth:2.0:metadata http://shibboleth.net/schema/idp/shibboleth-metadata.xsd
+                        urn:mace:shibboleth:2.0:security http://shibboleth.net/schema/idp/shibboleth-security.xsd
+                        urn:oasis:names:tc:SAML:2.0:assertion http://docs.oasis-open.org/security/saml/v2.0/saml-schema-assertion-2.0.xsd
+                        urn:oasis:names:tc:SAML:2.0:metadata http://docs.oasis-open.org/security/saml/v2.0/saml-schema-metadata-2.0.xsd
+                        urn:oasis:names:tc:SAML:metadata:algsupport http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-algsupport-v1.0.xsd
+                        http://www.w3.org/2000/09/xmldsig# http://www.w3.org/TR/2002/REC-xmldsig-core-20020212/xmldsig-core-schema.xsd
+                        http://www.w3.org/2009/xmldsig11# http://www.w3.org/TR/2013/REC-xmldsig-core1-20130411/xmldsig11-schema.xsd
+                        http://www.w3.org/2001/04/xmlenc# http://www.w3.org/TR/xmlenc-core/xenc-schema.xsd
+                        http://www.w3.org/2009/xmlenc11# http://www.w3.org/TR/2013/REC-xmlenc-core1-20130411/xenc-schema-11.xsd"
+    sortKey="1">
+
+    <!--
+    Below you place the mechanisms which define how to load the metadata for SP(s) you will
+    provide service to.
+    
+    Some simple examples are provided. The documentation provides more details; in most cases,
+    the modern replacement for these older plugins are the "DynamicHTTPMetadataProvider" and
+    "LocalDynamic" variants, which provide dramatic memory savings and more reliable operation.
+     
+    NOTE: You do NOT need to load metadata for this IdP itself within this configuration.
+    -->
+
+    <MetadataProvider id="eduid"
+                      xsi:type="FileBackedHTTPMetadataProvider"
+                      backingFile="%{idp.home}/metadata/eduid-metadata.xml"
+                      metadataURL="https://metadata.eduid.cz/entities/eduid+sp"
+                      maxRefreshDelay="PT15M"> 
+        
+        <MetadataFilter xsi:type="SignatureValidation" 
+                        requireSignedRoot="true"
+                        certificateFile="%{idp.home}/credentials/metadata.eduid.cz.crt.pem" />
+        <MetadataFilter
+            xsi:type="RequiredValidUntil"
+            maxValidityInterval="P30D" />
+ 
+        <MetadataFilter
+            xsi:type="Algorithm">
+ 
+        	<md:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc" />
+        	<Entity>ccm.net.cvut.cz</Entity>
+        	<Entity>https://adfs-ext.w2lan.cesnet.cz/adfs/services/trust</Entity>
+        	<Entity>https://adfs.w2lan.cesnet.cz/adfs/services/trust</Entity>
+        	<Entity>https://auth.eidas.cesnet.cz/sp</Entity>
+        	<Entity>https://camelot.lf2.cuni.cz/shibboleth</Entity>
+        	<Entity>https://cawi.fsv.cuni.cz/simplesaml/module.php/saml/sp/metadata.php/default-sp</Entity>
+        	<Entity>https://collector-metacentrum.liberouter.org/simplesaml/module.php/saml/sp/metadata.php/collector</Entity>
+        	<Entity>https://cz-online.aliveplatform.com/simplesaml/module.php/saml/sp/metadata.php/cz-online.aliveplatform.com</Entity>
+        	<Entity>https://digi.law.muni.cz</Entity>
+        	<Entity>https://digitool.is.cuni.cz/shibboleth</Entity>
+        	<Entity>https://dspace.vsb.cz/sp/shibboleth</Entity>
+        	<Entity>https://dspace2.zcu.cz/dspace</Entity>
+       	 	<Entity>https://edu.ista.tacr.cz/ISTA</Entity>
+        	<Entity>https://filesender.cesnet.cz/saml/sp</Entity>
+        	<Entity>https://gc3.cesnet.cz/shibboleth</Entity>
+        	<Entity>https://index.bbmri.cz/shibboleth</Entity>
+        	<Entity>https://iptel.cesnet.cz/shibboleth/cesnet-internal/sp</Entity>
+        	<Entity>https://ista.tacr.cz/ISTA</Entity>
+        	<Entity>https://itmulti.cz/simplesaml/module.php/saml/sp/metadata.php/portal4</Entity>
+        	<Entity>https://journals.bmj.com/shibboleth</Entity>
+        	<Entity>https://login.bbmri-eric.eu/proxy/</Entity>
+        	<Entity>https://login.ceitec.cz/proxy/</Entity>
+        	<Entity>https://login.elixir-czech.org/proxy/</Entity>
+        	<Entity>https://login.ezproxy.is.cuni.cz/sp/shibboleth</Entity>
+        	<Entity>https://login.ezproxy.uochb.cas.cz:2443/sp/shibboleth</Entity>
+        	<Entity>https://login.ezproxy.vscht.cz/sp/shibboleth</Entity>
+        	<Entity>https://mefanet-motol.cuni.cz/sp/shibboleth</Entity>
+        	<Entity>https://meta.cesnet.cz/sp/shibboleth</Entity>
+        	<Entity>https://mooc.cuni.cz/sp/shibboleth</Entity>
+        	<Entity>https://nfsmon.ics.muni.cz/</Entity>
+        	<Entity>https://odevzdej.cz/shibboleth/</Entity>
+        	<Entity>https://onlineca.cesnet-ca.cz/</Entity>
+        	<Entity>https://onlineca.cesnet-ca.cz/force</Entity>
+        	<Entity>https://orca.ruk.cuni.cz/shibboleth</Entity>
+        	<Entity>https://pentest.cesnet.cz/sp/shibboleth</Entity>
+        	<Entity>https://portal.lf3.cuni.cz/shibboleth/sp</Entity>
+        	<Entity>https://postudium.cz/auth/saml2/sp/metadata.php</Entity>
+        	<Entity>https://proxy.lifescienceid.org/metadata/backend.xml</Entity>
+        	<Entity>https://registry.cesnet-ca.cz/simplesaml</Entity>
+        	<Entity>https://repozitar.cz/shibboleth/</Entity>
+        	<Entity>https://seth.ics.muni.cz/shibboleth</Entity>
+        	<Entity>https://softweco.cz/shibboleth-sp</Entity>
+        	<Entity>https://su-dev.fit.vutbr.cz/kis</Entity>
+        	<Entity>https://su-int.fit.vutbr.cz/kis</Entity>
+        	<Entity>https://tcs-dev.cesnet.cz/simplesaml/</Entity>
+        	<Entity>https://tcs.cesnet.cz/simplesaml/</Entity>
+        	<Entity>https://teleinform.cz/simplesaml/module.php/saml/sp/metadata.php/portal1</Entity>
+        	<Entity>https://telekomunikace-tit.cz/simplesaml/module.php/saml/sp/metadata.php/portal3</Entity>
+        	<Entity>https://test.ista.tacr.cz/ISTA</Entity>
+        	<Entity>https://thalamoss-data.ics.muni.cz/shibboleth</Entity>
+        	<Entity>https://theses.cz/shibboleth/</Entity>
+        	<Entity>https://vut-vsb.cz/simplesaml/module.php/saml/sp/metadata.php/portal2</Entity>
+        	<Entity>https://vvvd.vsb.cz/shibboleth</Entity>
+        	<Entity>https://wikisofia.cz/shibboleth</Entity>
+        	<Entity>https://www.bookport.cz/</Entity>
+        	<Entity>https://www.cistbrno.cz/</Entity>
+        	<Entity>https://www.citacepro.com/simplesaml/module.php/saml/sp/metadata.php/eduid-sp</Entity>
+        	<Entity>https://www.eunis.cz/simplesamlphp/module.php/saml/sp/metadata.php/eunis</Entity>
+        	<Entity>https://www.jib.cz/shibboleth</Entity>
+        	<Entity>https://www.levna-knihovna.cz/simplesamlphp/module.php/saml/sp/metadata.php/default-sp</Entity>
+        	<Entity>https://www.liberouter.org/simplesamlphp/module.php/saml/sp/metadata.php/liberouter</Entity>
+        	<Entity>https://www.mecenat.eu/sp</Entity>
+        	<Entity>https://www.vutbr.cz/SSO/saml2/sp</Entity>
+ 
+        </MetadataFilter>
+
+    </MetadataProvider>
+    
+    <MetadataProvider id="edugain" 
+                      xsi:type="FileBackedHTTPMetadataProvider"
+                      metadataURL="https://metadata.eduid.cz/entities/edugain+sp"
+                      backingFile="%{idp.home}/metadata/edugain-metadata.xml" >
+
+        <MetadataFilter xsi:type="SignatureValidation" 
+                        requireSignedRoot="true" 
+                        certificateFile="%{idp.home}/credentials/metadata.eduid.cz.crt.pem" />
+
+        <MetadataFilter
+            xsi:type="RequiredValidUntil"
+            maxValidityInterval="P30D" />
+ 
+        <MetadataFilter
+            xsi:type="Algorithm">
+ 
+        	<md:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
+            	<ConditionRef>shibboleth.Conditions.TRUE</ConditionRef>
+
+	</MetadataFilter>
+ 
+    </MetadataProvider> 
+    
+    <MetadataProvider id="ldap3-metadata"  xsi:type="FilesystemMetadataProvider" metadataFile="%{idp.home}/metadata/ldap3-metadata.xml"/>
+    <MetadataProvider id="ldapuser-metadata"  xsi:type="FilesystemMetadataProvider" metadataFile="%{idp.home}/metadata/ldapuser-metadata.xml"/>
+
+    <MetadataProvider id="ezproxy-metadata"  xsi:type="FilesystemMetadataProvider" metadataFile="%{idp.home}/metadata/ezproxy-metadata.xml"/>
+
+    <MetadataProvider id="azure-metadata"  
+                      xsi:type="FileBackedHTTPMetadataProvider" 
+                      metadataURL="https://nexus.microsoftonline-p.com/federationmetadata/saml20/federationmetadata.xml" 
+                      backingFile="%{idp.home}/metadata/azure-metadata.xml" />
+
+
+    <!-- Google Metadata -->
+    <MetadataProvider id="google-metadata" 
+                xsi:type="FilesystemMetadataProvider"
+                metadataFile="%{idp.home}/metadata/google-metadata.xml"
+                requireValidMetadata="false" />
+
+    <!-- 4EU+ Metadata -->
+    <MetadataProvider id="foureuplus-metadata"
+                xsi:type="FilesystemMetadataProvider"
+                metadataFile="%{idp.home}/metadata/4euplus-metadata.xml"
+                requireValidMetadata="false" />
+
+    <!-- Ders Metadata -->
+    <MetadataProvider id="ders-metadata"
+                xsi:type="FilesystemMetadataProvider"
+                metadataFile="%{idp.home}/metadata/ders-metadata.xml"
+                requireValidMetadata="false" />
+    
+
+    
+    <!--
+    Example HTTP metadata provider.  Use this if you want to download the metadata
+    from a remote source.
+
+    You *MUST* provide the SignatureValidationFilter in order to function securely.
+    Get the public key certificate from the party publishing the metadata, and validate
+    it with them via some out of band mechanism (e.g., a fingerprint on a secure page).
+
+    The EntityRole filter saves memory by only loading metadata from SAML roles
+    that the IdP needs to interoperate with.
+    -->
+    
+    <!--
+    <MetadataProvider id="HTTPMetadata"
+                      xsi:type="FileBackedHTTPMetadataProvider"
+                      backingFile="%{idp.home}/metadata/localCopyFromXYZHTTP.xml"
+                      metadataURL="http://WHATEVER"
+                      failFastInitialization="false">
+        
+        <MetadataFilter xsi:type="SignatureValidation" certificateFile="%{idp.home}/credentials/metaroot.pem" />
+        <MetadataFilter xsi:type="RequiredValidUntil" maxValidityInterval="P30D"/>
+        <MetadataFilter xsi:type="EntityRole">
+            <RetainedRole>md:SPSSODescriptor</RetainedRole>
+        </MetadataFilter>
+    </MetadataProvider>
+    -->   
+
+    <!--
+    Example file metadata provider.  Use this if you want to load metadata
+    from a local file. You use this if you have some local SPs which are not
+    "federated" but you wish to offer a service to.
+    
+    If you do not provide a SignatureValidation filter, then you have the
+    responsibility to ensure that the contents on disk are trustworthy.
+    -->
+    
+    <!--
+    <MetadataProvider id="LocalMetadata"  xsi:type="FilesystemMetadataProvider" metadataFile="PATH_TO_YOUR_METADATA"/>
+    -->
+
+
+    <!--
+    Example CAS metadata source for managing CAS services using SAML metadata.
+    -->
+
+    <!--
+    <MetadataProvider id="CASMetadata"
+                      xsi:type="FilesystemMetadataProvider"
+                      metadataFile="PATH_TO_YOUR_METADATA"
+                      indexesRef="shibboleth.CASMetadataIndices" />
+    -->
+
+</MetadataProvider>

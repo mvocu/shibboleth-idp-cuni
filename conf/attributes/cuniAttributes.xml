@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+                           
+       default-init-method="initialize"
+       default-destroy-method="destroy">
+       
+    <bean parent="shibboleth.TranscodingRuleLoader">
+    <constructor-arg>
+    <list>
+
+<!--
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">authMail</prop>
+                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="saml2.name">urn:oid:1.2.840.113549.1.9.1</prop>
+                    <prop key="displayName.en">Authorized e-mail</prop>
+                    <prop key="displayName.cs">Autorizovaný e-mail</prop>
+                    <prop key="description.en">Organizational authorized e-mail</prop>
+                    <prop key="description.cs">Organizací autorizovaný e-mail</prop>
+                </props>
+            </property>
+        </bean>
+-->
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">authorizedMail</prop>
+                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="saml2.name">urn:oid:1.2.840.113549.1.9.1</prop>
+                    <prop key="displayName.en">Authorized e-mail</prop>
+                    <prop key="displayName.cs">Autorizovaný e-mail</prop>
+                    <prop key="description.en">Organizational authorized e-mail</prop>
+                    <prop key="description.cs">Organizací autorizovaný e-mail</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">mefaPerson</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
+                    <prop key="saml2.name">http://www.mefanet.cz/mefaperson/</prop>
+                    <prop key="displayName.en">MEFANet affiliation</prop>
+                    <prop key="displayName.cs">Příslušnost k MEFANet</prop>
+                    <prop key="description.en">Affiliation to organization in MEFANet project</prop>
+                    <prop key="description.cs">Příslušnost k organizaci v projektu MEFANet</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">cuniPersonalId</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
+                    <prop key="saml2.name">http://cas.cuni.cz/attrs/cunipersonalid</prop>
+                    <prop key="displayName.en">Personal ID</prop>
+                    <prop key="displayName.cs">Osobní číslo</prop>
+                    <prop key="description.en">Personal ID assigned by organization</prop>
+                    <prop key="description.cs">Osobní číslo přidělené organizací</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">cuniStudyProgram</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
+                    <prop key="saml2.name">http://cas.cuni.cz/attrs/cunistudyprogram</prop>
+                    <prop key="displayName.en">Study program</prop>
+                    <prop key="displayName.cs">Studijní program</prop>
+                    <prop key="description.en">Code of study program</prop>
+                    <prop key="description.cs">Kód studijního programu</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">cuniStudySubject</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
+                    <prop key="saml2.name">http://cas.cuni.cz/attrs/cunistudysubject</prop>
+                    <prop key="displayName.en">Study subject</prop>
+                    <prop key="displayName.cs">Studijní obor</prop>
+                    <prop key="description.en">Code of study subject</prop>
+                    <prop key="description.cs">Kód studijního oboru</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">cuniScopedAffiliation</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder CASStringTranscoder</prop>
+                    <prop key="saml2.name">http://cas.cuni.cz/attrs/cuniPersonScopedAffiliation</prop>
+                    <prop key="saml1.name">http://cas.cuni.cz/attrs/cuniPersonScopedAffiliation</prop>
+                    <prop key="saml1.encodeType">false</prop>
+                    <prop key="displayName.en">Organizational unit affiliation</prop>
+                    <prop key="displayName.cs">Příslušnost k součásti organizace</prop>
+                    <prop key="description.en">Specifies the person's affiliation to organizational unit within organization</prop>
+                    <prop key="description.cs">Popisuje vztah osoby k součásti organizace</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">cuniPersonPrincipalName</prop>
+                    <prop key="transcoder">SAML2ScopedStringTranscoder SAML1ScopedStringTranscoder CASScopedStringTranscoder</prop>
+                    <prop key="saml2.name">http://cas.cuni.cz/attrs/cuniprincipalname</prop>
+                    <prop key="saml1.name">http://cas.cuni.cz/attrs/cuniprincipalname</prop>
+                    <prop key="saml1.encodeType">false</prop>
+                    <prop key="displayName.en">Organizational login name</prop>
+                    <prop key="displayName.cs">Přihlašovací jméno v organizaci</prop>
+                    <prop key="description.en">Organizational login name</prop>
+                    <prop key="description.cs">Přihlašovací jméno v organizaci</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">cuniPrincipalName</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
+                    <prop key="saml2.name">http://cas.cuni.cz/attrs/cuniprincipalname</prop>
+                    <prop key="displayName.en">Organizational login name</prop>
+                    <prop key="displayName.cs">Přihlašovací jméno v organizaci</prop>
+                    <prop key="description.en">Organizational login name</prop>
+                    <prop key="description.cs">Přihlašovací jméno v organizaci</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">cuniScopedAffiliation</prop>
+                    <prop key="transcoder">SAML2ScopedStringTranscoder SAML1ScopedStringTranscoder</prop>
+                    <prop key="saml2.name">http://cas.cuni.cz/attrs/cuniscopedaffiliation</prop>
+                    <prop key="displayName.en">Affiliation to organizational nuits</prop>
+                    <prop key="displayName.cs">Vztah k součástem organizace</prop>
+                    <prop key="description.en">Affiliation to organizational nuits</prop>
+                    <prop key="description.cs">Vztah k součástem organizace</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">cuniBirthDate</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
+                    <prop key="saml2.name">http://cas.cuni.cz/attrs/cunibirthdate</prop>
+                    <prop key="displayName.en">Date of birth</prop>
+                    <prop key="displayName.cs">Datum narození</prop>
+                    <prop key="description.en">Date of birth</prop>
+                    <prop key="description.cs">Datum narození</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">cuniAuthenticationLevel</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
+                    <prop key="saml2.name">http://cas.cuni.cz/attrs/authenticationlevel</prop>
+                    <prop key="displayName.en">Authentication level</prop>
+                    <prop key="displayName.cs">Úroveň ověření hesla</prop>
+                    <prop key="description.en">Authentication level</prop>
+                    <prop key="description.cs">Úroveň ověření hesla</prop>
+                </props>
+            </property>
+        </bean>
+
+    </list>
+    </constructor-arg>
+    </bean>
+    
+</beans>
+

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+This file is a rudimentary example. While it is semi-functional, it isn't very
+interesting. It is here only as a starting point for your deployment process
+to avoid any dependency on components like an LDAP directory.
+
+Very few attribute definitions and data connectors are demonstrated, and the
+data is derived statically from the logged-in username and a static example
+connector.
+
+The file(s) in the examples directory contain more examples that involve more
+complex approaches. Deployers should refer to the documentation for a complete
+list of possible components and their options.
+-->
+<AttributeResolver
+        xmlns="urn:mace:shibboleth:2.0:resolver" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:schemaLocation="urn:mace:shibboleth:2.0:resolver http://shibboleth.net/schema/idp/shibboleth-attribute-resolver.xsd">
+
+
+    <!-- ========================================== -->
+    <!--      Attribute Definitions                 -->
+    <!-- ========================================== -->
+
+    <!-- 
+	Only attributes not exported directly from connectors are listed here,
+	ie. mainly those in need of further massaging.
+    -->
+
+    <!-- 
+	uid
+    -->
+    <AttributeDefinition id="uid" xsi:type="PrincipalName" />
+
+    <!--
+	eduPersonPrincipalName
+    -->
+    <AttributeDefinition id="eduPersonPrincipalName" xsi:type="Scoped" scope="%{idp.scope}">
+        <InputDataConnector ref="cuniLDAP" attributeNames="cuniPersonalId" />
+    </AttributeDefinition>
+
+    <!--
+	eduPersonScopedAffiliation
+    -->
+    <AttributeDefinition id="eduPersonScopedAffiliation" xsi:type="Scoped" scope="%{idp.scope}">
+        <InputAttributeDefinition ref="eduPersonAffiliation" />
+    </AttributeDefinition>
+
+    <!--
+	eduPersonTargetedID
+    -->
+    <AttributeDefinition id="eduPersonTargetedID" xsi:type="SAML2NameID" nameIdFormat="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">
+        <InputDataConnector ref="storedIDConnector" attributeNames="storedID" />
+        <AttributeEncoder xsi:type="SAML2XMLObject" name="urn:oid:1.3.6.1.4.1.5923.1.1.1.10"/>
+    </AttributeDefinition>
+
+    <!--
+	eduPersonUniqueId
+    -->
+    <AttributeDefinition id="eduPersonUniqueId" xsi:type="Scoped" scope="%{idp.scope}">
+        <InputDataConnector ref="cuniLDAP" attributeNames="cuniUniqueId" />
+    </AttributeDefinition>
+
+    <!--
+	cuniStudyProgram
+    -->
+    <AttributeDefinition id="cuniStudyProgram" xsi:type="RegexSplit" regex="(\w*):.*">
+	<InputDataConnector ref="cuniLDAP" attributeNames="cuniStudyProgram" />
+    </AttributeDefinition>
+
+    <!--
+        cuniStudySubject
+    -->
+    <AttributeDefinition id="cuniStudySubject" xsi:type="RegexSplit" regex="(\w*):.*">
+        <InputDataConnector ref="cuniLDAP" attributeNames="cuniStudySubject" />
+    </AttributeDefinition>
+
+    <!--
+	cuniAuthenticationLevel
+    -->
+    <AttributeDefinition id="cuniAuthenticationLevel" xsi:type="Simple">
+        <InputDataConnector ref="scriptedAttributes" attributeNames="authenticationLevel" />
+    </AttributeDefinition>
+
+    <!--
+	googlePrincipal
+    -->
+    <AttributeDefinition id="googlePrincipal" xsi:type="Simple">
+        <InputDataConnector ref="scriptedAttributes" attributeNames="googlePrincipal" />
+    </AttributeDefinition>
+
+    <!--
+	unstructuredName
+    -->
+    <AttributeDefinition id="unstructuredName" xsi:type="Simple">
+        <InputDataConnector ref="cuniLDAP" attributeNames="cuniUniqueId" />
+    </AttributeDefinition>
+
+    <!--
+	commonNameASCII
+    --> 
+    <AttributeDefinition id="commonNameASCII" xsi:type="Simple">
+        <InputDataConnector ref="cuniLDAP" attributeNames="cn;lang-en" />
+    </AttributeDefinition>
+
+    <!--
+        schacPersonalUniqueCode
+    --> 
+    <AttributeDefinition id="schacPersonalUniqueCode" xsi:type="Simple">
+        <InputDataConnector ref="cuniLDAP" attributeNames="cuniUniqueId" />
+    </AttributeDefinition>
+
+    <!--
+        ImmutableID
+	  - for nameid generation for Azure
+    --> 
+    <AttributeDefinition id="ImmutableID" xsi:type="Simple">
+        <InputDataConnector ref="cuniLDAP" attributeNames="cuniUniqueId" />
+	<AttributeEncoder xsi:type="SAML2String" name="ImmutableID" />
+    </AttributeDefinition>
+
+    <!--
+	UserId
+	  - for nameid generation for Azure
+    -->
+    <AttributeDefinition id="UserId" xsi:type="Scoped" scope="uktest.%{idp.scope}">
+        <InputDataConnector ref="cuniLDAP" attributeNames="cuniPersonalId" />
+ 	<AttributeEncoder xsi:type="SAML2ScopedString" name="IDPEmail" />
+    </AttributeDefinition>
+
+
+
+    <!-- ===================================================== -->
+    <!-- Below is the default contents preserved as an example -->
+    <!-- ===================================================== -->
+
+    <!--
+    The EPPN is the "standard" federated username in higher ed.
+    For guidelines on the implementation of this attribute, refer
+    to the Shibboleth and eduPerson documentation. Above all, do
+    not expose a value for this attribute without considering the
+    long term implications. 
+    -->
+    <!--
+    <AttributeDefinition id="eduPersonPrincipalName" xsi:type="Scoped" scope="%{idp.scope}">
+        <InputAttributeDefinition ref="uid" />
+    </AttributeDefinition>
+    -->
+
+    <!--
+    The uid is the closest thing to a "standard" LDAP attribute
+    representing a local username, but you should generally *never*
+    expose uid to federated services, as it is rarely globally unique.
+    -->
+    <!--
+    <AttributeDefinition id="uid" xsi:type="PrincipalName" />
+    -->
+
+    <!--
+    In the rest of the world, the email address is the standard identifier,
+    despite the problems with that practice. Consider making the EPPN
+    value the same as your official email addresses whenever possible.
+    -->
+    <!--
+    <AttributeDefinition id="mail" xsi:type="Template">
+        <InputAttributeDefinition ref="uid" />
+        <Template>
+          <![CDATA[
+               ${uid}@example.org
+          ]]>
+        </Template>
+    </AttributeDefinition>
+    -->
+
+    <!--
+    This is an example of an attribute sourced from a data connector.
+    -->
+    <AttributeDefinition id="eduPersonScopedAffiliation" xsi:type="Scoped" scope="%{idp.scope}">
+        <InputDataConnector ref="staticAttributes" attributeNames="affiliation" />
+    </AttributeDefinition>
+
+
+    <!-- ========================================== -->
+    <!--      Data Connectors                       -->
+    <!-- ========================================== -->
+
+    <!--
+    <DataConnector id="staticAttributes" xsi:type="Static" exportAttributes="schacHomeOrganization">
+        <Attribute id="schacHomeOrganization">
+            <Value>%{idp.scope}</Value>
+        </Attribute>
+        <Attribute id="affiliation">
+            <Value>member</Value>
+        </Attribute>
+    </DataConnector>
+    -->
+
+</AttributeResolver>
