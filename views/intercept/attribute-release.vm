@@ -46,6 +46,9 @@
                 </a>
           </nav>
 
+          <form action="$flowExecutionUrl" method="post">
+              #parse("csrf/csrf.vm")
+
           <main class="d-flex flex-md-row flex-column container-fluid justify-content-center" style="margin-top: 64px" id="content">
 
 
@@ -95,8 +98,6 @@
 
          </section>
 
-              <form action="$flowExecutionUrl" method="post" style="padding:10px">
-                 #parse("csrf/csrf.vm")
 
                 <div class="boxed">
                     <h2>#springMessageText("idp.attribute-release.attributesHeader", "Information to be Provided to Service")</h2>
@@ -170,11 +171,12 @@
                     <p>#springMessageText("idp.attribute-release.consentMethodRevoke", "This setting can be revoked at any time with the checkbox on the login page.")</p>
                 #end
 
-            </form>
 
             </div>
 
         </main>
+
+          </form>
 
     </body>
 </html>
