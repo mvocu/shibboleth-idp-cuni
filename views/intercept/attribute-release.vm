@@ -37,7 +37,13 @@
     <body>
         <main class="main">
             <nav class="navbar navbar-expand-md fixed-top bg-white shadow-sm-strong">
-                <img class="main-logo" src="$request.getContextPath()#springMessageText("idp.logo", "/images/placeholder-logo.png")" alt="#springMessageText("idp.logo.alt-text", "logo")" />
+                <a class="navbar-brand flex-shrink-1" href="{{ url('/') }}">
+                    <img width="48" height="48" class="d-inline-block align-text-top main-logo" src="$request.getContextPath()#springMessageText("idp.logo", "/images/placeholder-logo.png")" alt="#springMessageText("idp.logo.alt-text", "logo")" />
+                    <span class="navbar-title">
+                	<span>#springMessageText("idp.title", "Identity Provider")</span><br/>
+                	<span class="subtitle">#springMessageText("root.title", "Central Authentication Service")</span>
+                </span>
+                </a>
             </nav>
 
             <section>
