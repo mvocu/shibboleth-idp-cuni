@@ -48,8 +48,6 @@
 
           <main class="d-flex flex-md-row flex-column container-fluid justify-content-center" style="margin-top: 64px" id="content">
 
-              <form action="$flowExecutionUrl" method="post" style="padding:10px">
-                  #parse("csrf/csrf.vm")
 
                   <div class="d-flex flex-column col-lg-7" style="max-width: 720px">
 
@@ -95,7 +93,12 @@
                 </li>
             #end
             </ul>
-            
+
+         </section>
+
+              <form action="$flowExecutionUrl" method="post" style="padding:10px">
+                 #parse("csrf/csrf.vm")
+
                 <div class="boxed">
                     <h2>#springMessageText("idp.attribute-release.attributesHeader", "Information to be Provided to Service")</h2>
 
@@ -167,7 +170,6 @@
                 #if ($attributeReleaseFlowDescriptor.doNotRememberConsentAllowed || $attributeReleaseFlowDescriptor.globalConsentAllowed)
                     <p>#springMessageText("idp.attribute-release.consentMethodRevoke", "This setting can be revoked at any time with the checkbox on the login page.")</p>
                 #end
-         </section>
 
             </form>
 
