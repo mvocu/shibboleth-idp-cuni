@@ -48,6 +48,14 @@
 
           <main class="d-flex flex-md-row flex-column container-fluid justify-content-center" style="margin-top: 64px" id="content">
 
+              <div class="d-flex flex-column col-lg-7" style="max-width: 720px">
+                  <div class="card mt-5">
+                      <div class="card-body">
+                          <h4 class="card-title">#springMessageText("idp.attribute-release.title", "Information Release")</h4>
+                      </div>
+                  </div>
+              </div>
+
          <section>
             <h1>#springMessageText("idp.attribute-release.title", "Information Release")</h1>
             #if ($rpOrganizationLogo)
