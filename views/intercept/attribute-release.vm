@@ -35,8 +35,8 @@
         <link rel="stylesheet" type="text/css" href="$request.getContextPath()#springMessageText("idp.css", "/css/placeholder.css")">
     </head>
     <body>
-        <main class="main">
-            <nav class="navbar navbar-expand-md fixed-top bg-white shadow-sm-strong">
+
+          <nav class="navbar navbar-expand-md fixed-top bg-white shadow-sm-strong">
                 <a class="navbar-brand flex-shrink-1" href="{{ url('/') }}">
                     <img width="48" height="48" class="d-inline-block align-text-top main-logo" src="$request.getContextPath()#springMessageText("idp.logo", "/images/placeholder-logo.png")" alt="#springMessageText("idp.logo.alt-text", "logo")" />
                     <span class="navbar-title">
@@ -44,9 +44,11 @@
                 	<span class="subtitle">#springMessageText("root.title", "Central Authentication Service")</span>
                 </span>
                 </a>
-            </nav>
+          </nav>
 
-            <section>
+          <main class="d-flex flex-md-row flex-column container-fluid justify-content-center" style="margin-top: 64px" id="content">
+
+         <section>
             <h1>#springMessageText("idp.attribute-release.title", "Information Release")</h1>
             #if ($rpOrganizationLogo)
                 <img class="service-logo" src="$encoder.encodeForHTMLAttribute($rpOrganizationLogo)" alt="logo for $encoder.encodeForHTMLAttribute($serviceName)" />
@@ -159,10 +161,6 @@
             </form>
             </section>
         </main>
-        <footer class="footer">
-            <div class="cc">
-                <p>#springMessageText("idp.footer", "Insert your footer text here.")</p>
-            </div>
-        </footer>
+
     </body>
 </html>
