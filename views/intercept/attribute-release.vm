@@ -55,7 +55,6 @@
                           <h5 class="mt-5">#springMessageText("idp.attribute-release.title", "Information Release")</h5>
                       </div>
 
-                  </div>
 
          <section>
             <h1>#springMessageText("idp.attribute-release.title", "Information Release")</h1>
@@ -173,6 +172,7 @@
 
             </form>
 
+            </div>
 
         </main>
 
