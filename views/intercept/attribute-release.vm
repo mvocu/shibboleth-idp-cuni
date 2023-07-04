@@ -36,9 +36,10 @@
     </head>
     <body>
         <main class="main">
-            <header>
+            <nav class="navbar navbar-expand-md fixed-top bg-white shadow-sm-strong">
                 <img class="main-logo" src="$request.getContextPath()#springMessageText("idp.logo", "/images/placeholder-logo.png")" alt="#springMessageText("idp.logo.alt-text", "logo")" />
-            </header>
+            </nav>
+
             <section>
             <h1>#springMessageText("idp.attribute-release.title", "Information Release")</h1>
             #if ($rpOrganizationLogo)
