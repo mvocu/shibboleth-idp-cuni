@@ -76,10 +76,10 @@
                </ul>
            </section>
 
-           <div class="card mt-4">
+           <div class="card mt-4 container container-fluid">
 
-               <div class="card-body d-flex flex-row ">
-                   <div class="me-4 mb-2">
+               <div class="card-body row">
+                   <div class="me-4 mb-2 col-xs-12 col-md-7">
                    <h5 class="card-title mb-4">#springMessageText("idp.attribute-release.attributesHeader", "Information to be Provided to Service")</h5>
 
                    <div class="accordion mb-2" id="attr-release">
@@ -89,11 +89,11 @@
                            <fieldset>
                            #end
                            <h5 class="accordion-header">
-                               <button class="accordion-button" type="button" data-mdb-toggle="collapse" data-mdb-target="c-$attribute.id" aria-expanded="true" aria-controls="collapseOne">
+                               <button class="accordion-button" type="button" data-mdb-toggle="collapse" data-mdb-target="#c-$attribute.id" aria-expanded="false" aria-controls="c-$attribute.id">
                                    $encoder.encodeForHTML($attributeDisplayNameFunction.apply($attribute))
                                </button>
                            </h5>
-                           <div class="accordion-collapse collapse show" id="c-$attribute.id" data-mdb-parent="attr-release">
+                           <div class="accordion-collapse collapsed" id="c-$attribute.id" data-mdb-parent="#attr-release">
                                <div class="accordion-body">
                                    #foreach ($value in $attribute.values)
                                    #if ($replaceDollarWithNewline)
@@ -123,7 +123,7 @@
 
                    </div>
 
-                   <div class="me-4 mb-2">
+                   <div class="me-4 mb-2 col-xs-12 col-md-5">
                    <fieldset>
                        #if ($attributeReleaseFlowDescriptor.doNotRememberConsentAllowed || $attributeReleaseFlowDescriptor.globalConsentAllowed)
                        <h5 class="card-title mb-4">
