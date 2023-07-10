@@ -72,15 +72,15 @@
 
                 ## You may need to modify this to taste, such as changing the flow name checked to authn/MFA.
                 #if (!$authenticationContext.getActiveResults().containsKey('authn/Password'))
-                <div class="form-outline mb-4">
-                    <input class="form-control" type="checkbox" name="donotcache" value="1" id="donotcache" />
-                    <label class="form-label" for="donotcache">#springMessageText("idp.login.donotcache", "Don't Remember Login")</label>
+                <div class="form-check mb-4">
+                    <input class="form-check-input" type="checkbox" name="donotcache" value="1" id="donotcache" />
+                    <label class="form-check-label" for="donotcache">#springMessageText("idp.login.donotcache", "Don't Remember Login")</label>
                 </div>
                 #end
 
-                <div class="form-outline mb-4">
-                    <input class="form-control" id="_shib_idp_revokeConsent" type="checkbox" name="_shib_idp_revokeConsent" value="true" />
-                    <label class="form-label" for="_shib_idp_revokeConsent">#springMessageText("idp.attribute-release.revoke", "Clear prior granting of permission for release of your information to this service.")</label>
+                <div class="form-check mb-4">
+                    <input class="form-check-input" id="_shib_idp_revokeConsent" type="checkbox" name="_shib_idp_revokeConsent" value="true" />
+                    <label class="form-check-label" for="_shib_idp_revokeConsent">#springMessageText("idp.attribute-release.revoke", "Clear prior granting of permission for release of your information to this service.")</label>
                 </div>
 
                 <div class="grid">
