@@ -54,7 +54,7 @@
         <div class="border-bottom border-2 border-primary">
             <h4>$title - $titleSuffix</h4>
         </div>
-        <section class="alert alert-error mt-2">
+        <section class="alert alert-warning mt-2">
             <p>#evaluate($message)</p>
         </section>
     </div>
