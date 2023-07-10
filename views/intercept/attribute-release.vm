@@ -93,7 +93,8 @@
                    <p>$encoder.encodeForHTML($attributeDisplayNameFunction.apply($attribute))</p>
                    #end
                            </div>
-                           <div class="accordion-body">
+                           <div class="accordion-collapse collapse-hide">
+                               <div class="accordion-body">
                        #foreach ($value in $attribute.values)
                        #if ($replaceDollarWithNewline)
                        #set ($encodedValue = $encoder.encodeForHTML($value.getDisplayValue()).replaceAll($encoder.encodeForHTML('$'),"<br>"))
@@ -110,6 +111,7 @@
                            #end
                        </p>
                        #end
+                               </div>
                            </div>
                    #if ($attributeReleaseFlowDescriptor.perAttributeConsentEnabled)
                    </fieldset>
