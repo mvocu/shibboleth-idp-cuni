@@ -88,7 +88,7 @@
                            #if ($attributeReleaseFlowDescriptor.perAttributeConsentEnabled)
                            <fieldset>
                            #end
-                           <h5 class="accordion-header ms-2">
+                           <h5 class="accordion-header">
                                <button class="accordion-button" type="button" data-mdb-toggle="collapse" data-mdb-target="c-$attribute" aria-expanded="true" aria-controls="collapseOne">
                                    $encoder.encodeForHTML($attributeDisplayNameFunction.apply($attribute))
                                </button>
