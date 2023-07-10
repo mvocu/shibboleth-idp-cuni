@@ -50,11 +50,13 @@
 
 <main class="d-flex flex-md-row flex-column container-fluid justify-content-center" style="margin-top: 64px" id="content">
 
-    <section>
-        <h1>$title - $titleSuffix</h1>
-        <p>#evaluate($message)</p>
-    </section>
-
+    <div class="d-flex flex-column col-lg-7 mt-5">
+        <section class="alert alert-error">
+            <h1>$title - $titleSuffix</h1>
+            <p>#evaluate($message)</p>
+        </section>
+    </div>
+    
 </main>
 
 #parse ("footer.vm")
