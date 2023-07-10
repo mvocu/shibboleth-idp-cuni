@@ -40,44 +40,46 @@
                <h4 class="card-title">#springMessageText("idp.attribute-release.title", "Information Release")</h4>
            </div>
 
-           <section class="alert alert-info mt-4">
-               #if ($rpOrganizationLogo)
-               <img class="service-logo" src="$encoder.encodeForHTMLAttribute($rpOrganizationLogo)" alt="logo for $encoder.encodeForHTMLAttribute($serviceName)" />
-               #end
-
-               #if ($serviceName)
-               <p>
-                   #springMessageText("idp.attribute-release.serviceNameLabel", "You are about to access the service:")&nbsp;
-                   <strong>$encoder.encodeForHTML($serviceName)</strong>
-                   #if ($rpOrganizationName)
-                   #springMessageText("idp.attribute-release.of", "of") $encoder.encodeForHTML($rpOrganizationName)
-                   #end
-               </p>
-               #end
-
-               #if ($serviceDescription)
-               <p>
-                   #springMessageText("idp.attribute-release.serviceDescriptionLabel", "Description as provided by this service:")<br>
-                   <strong>$encoder.encodeForHTML($serviceDescription)</strong>
-               </p>
-               #end
-
-               <ul>
-                   #if ($informationURL)
-                   <li>
-                       <a href="$informationURL">#springMessageText("idp.attribute-release.informationURLLabel", "Additional information about the service")</a>
-                   </li>
-                   #end
-
-                   #if ($privacyStatementURL)
-                   <li>
-                       <a href="$privacyStatementURL">#springMessageText("idp.attribute-release.privacyStatementURLLabel", "Data privacy information of the service")</a>
-                   </li>
-                   #end
-               </ul>
-           </section>
 
            <div class="card mt-5">
+               <div class="card-body">
+               <section class="alert alert-info mt-4">
+                   #if ($rpOrganizationLogo)
+                   <img class="service-logo" src="$encoder.encodeForHTMLAttribute($rpOrganizationLogo)" alt="logo for $encoder.encodeForHTMLAttribute($serviceName)" />
+                   #end
+
+                   #if ($serviceName)
+                   <p>
+                       #springMessageText("idp.attribute-release.serviceNameLabel", "You are about to access the service:")&nbsp;
+                       <strong>$encoder.encodeForHTML($serviceName)</strong>
+                       #if ($rpOrganizationName)
+                       #springMessageText("idp.attribute-release.of", "of") $encoder.encodeForHTML($rpOrganizationName)
+                       #end
+                   </p>
+                   #end
+
+                   #if ($serviceDescription)
+                   <p>
+                       #springMessageText("idp.attribute-release.serviceDescriptionLabel", "Description as provided by this service:")<br>
+                       <strong>$encoder.encodeForHTML($serviceDescription)</strong>
+                   </p>
+                   #end
+
+                   <ul>
+                       #if ($informationURL)
+                       <li>
+                           <a href="$informationURL">#springMessageText("idp.attribute-release.informationURLLabel", "Additional information about the service")</a>
+                       </li>
+                       #end
+
+                       #if ($privacyStatementURL)
+                       <li>
+                           <a href="$privacyStatementURL">#springMessageText("idp.attribute-release.privacyStatementURLLabel", "Data privacy information of the service")</a>
+                       </li>
+                       #end
+                   </ul>
+               </section>
+               </div>
 
                <div class="card-body">
                    <h5 class="card-title">#springMessageText("idp.attribute-release.attributesHeader", "Information to be Provided to Service")</h5>
@@ -147,25 +149,24 @@
                        #end
                        #if ($attributeReleaseFlowDescriptor.globalConsentAllowed)
                        <div class="form-check mb-2">
-                           <input id="_shib_idp_globalConsent" type="radio" name="_shib_idp_consentOptions" value="_shib_idp_globalConsent">
-                           <label for="_shib_idp_globalConsent">#springMessageText("idp.attribute-release.globalConsent", "Do not ask me again")</label>
+                           <input class="form-check-input" id="_shib_idp_globalConsent" type="radio" name="_shib_idp_consentOptions" value="_shib_idp_globalConsent">
+                           <label class="form-check-label" for="_shib_idp_globalConsent">#springMessageText("idp.attribute-release.globalConsent", "Do not ask me again")</label>
                            <p class="ms-2"><small>#springMessageText("idp.attribute-release.globalConsentItem", "I agree that <strong>all</strong> of my information will be released to <strong>any</strong> service.")</small></p>
                        </div>
                        #end
                    </fieldset>
 
-                   <div class="d-flex flex-row justify-content-end align-items-start mt-2 mb-2">
+                   <div class="d-flex flex-row justify-content-start align-items-start mt-2 mb-2">
                        <button class="btn btn-success" type="submit" name="_eventId_proceed"><i class="fa fa-check me-2"></i>#springMessageText("idp.attribute-release.accept", "Accept")</button>
-                       <button class="btn btn-primary" type="submit" name="_eventId_AttributeReleaseRejected"><i class="fa fa-cross me-2"></i>#springMessageText("idp.attribute-release.reject", "Reject")</button>
+                       <button class="btn btn-primary" type="submit" name="_eventId_AttributeReleaseRejected"><i class="fa fa-times me-2"></i>#springMessageText("idp.attribute-release.reject", "Reject")</button>
                    </div>
 
+                   #if ($attributeReleaseFlowDescriptor.doNotRememberConsentAllowed || $attributeReleaseFlowDescriptor.globalConsentAllowed)
+                   <p>#springMessageText("idp.attribute-release.consentMethodRevoke", "This setting can be revoked at any time with the checkbox on the login page.")</p>
+                   #end
+
                </div>
 
-               #if ($attributeReleaseFlowDescriptor.doNotRememberConsentAllowed || $attributeReleaseFlowDescriptor.globalConsentAllowed)
-               <div class="card-footer">
-                   <p>#springMessageText("idp.attribute-release.consentMethodRevoke", "This setting can be revoked at any time with the checkbox on the login page.")</p>
-               </div>
-               #end
 
            </div>
 
