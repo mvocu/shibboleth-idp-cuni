@@ -79,17 +79,17 @@
            <div class="card mt-5">
 
                <div class="card-body d-flex flex-row ">
-                   <div>
-                   <h5 class="card-title">#springMessageText("idp.attribute-release.attributesHeader", "Information to be Provided to Service")</h5>
+                   <div class="me-4 mb-2">
+                   <h5 class="card-title mb-4">#springMessageText("idp.attribute-release.attributesHeader", "Information to be Provided to Service")</h5>
 
-                   <div class="accordion mt-2 mb-2">
+                   <div class="accordion mb-2">
                    #foreach ($attribute in $attributeReleaseContext.getConsentableAttributes().values())
                        <div class="accordion-item">
                            #if ($attributeReleaseFlowDescriptor.perAttributeConsentEnabled)
                            <fieldset>
                            #end
                            <h5 class="accordion-header ms-2">
-                               <legend><p>$encoder.encodeForHTML($attributeDisplayNameFunction.apply($attribute))</p></legend>
+                               $encoder.encodeForHTML($attributeDisplayNameFunction.apply($attribute))
                            </h5>
                            <div class="accordion-collapse collapse-hide">
                                <div class="accordion-body">
@@ -121,10 +121,10 @@
 
                    </div>
 
-                   <div>
+                   <div class="ms-4 mb-2">
                    <fieldset>
                        #if ($attributeReleaseFlowDescriptor.doNotRememberConsentAllowed || $attributeReleaseFlowDescriptor.globalConsentAllowed)
-                       <h5 class="card-title">
+                       <h5 class="card-title mb-4">
                            #springMessageText("idp.attribute-release.consentMethod", "Select an information release consent duration:")
                        </h5>
                        #end
@@ -133,21 +133,21 @@
                        <div class="form-check mb-2">
                            <input class="form-check-input" id="_shib_idp_doNotRememberConsent" type="radio" name="_shib_idp_consentOptions" value="_shib_idp_doNotRememberConsent">
                            <label class="form-check-label" for="_shib_idp_doNotRememberConsent">#springMessageText("idp.attribute-release.doNotRememberConsent", "Ask me again at next login")</label>
-                           <p class="ms-2"><small>#springMessageText("idp.attribute-release.doNotRememberConsentItem", "I agree to send my information this time.")</small></p>
+                           <p class="ms-4"><small>#springMessageText("idp.attribute-release.doNotRememberConsentItem", "I agree to send my information this time.")</small></p>
                        </div>
                        #end
                        #if ($attributeReleaseFlowDescriptor.doNotRememberConsentAllowed || $attributeReleaseFlowDescriptor.globalConsentAllowed)
                        <div class="form-check mb-2">
                            <input class="form-check-input" id="_shib_idp_rememberConsent" type="radio" name="_shib_idp_consentOptions" value="_shib_idp_rememberConsent" checked>
                            <label class="form-check-label" for="_shib_idp_rememberConsent">#springMessageText("idp.attribute-release.rememberConsent", "Ask me again if information changes")</label>
-                           <p class="ms-2"><small>#springMessageText("idp.attribute-release.rememberConsentItem", "I agree that the same information will be sent automatically to this service in the future.")</small></p>
+                           <p class="ms-4"><small>#springMessageText("idp.attribute-release.rememberConsentItem", "I agree that the same information will be sent automatically to this service in the future.")</small></p>
                        </div>
                        #end
                        #if ($attributeReleaseFlowDescriptor.globalConsentAllowed)
                        <div class="form-check mb-2">
                            <input class="form-check-input" id="_shib_idp_globalConsent" type="radio" name="_shib_idp_consentOptions" value="_shib_idp_globalConsent">
                            <label class="form-check-label" for="_shib_idp_globalConsent">#springMessageText("idp.attribute-release.globalConsent", "Do not ask me again")</label>
-                           <p class="ms-2"><small>#springMessageText("idp.attribute-release.globalConsentItem", "I agree that <strong>all</strong> of my information will be released to <strong>any</strong> service.")</small></p>
+                           <p class="ms-4"><small>#springMessageText("idp.attribute-release.globalConsentItem", "I agree that <strong>all</strong> of my information will be released to <strong>any</strong> service.")</small></p>
                        </div>
                        #end
                    </fieldset>
