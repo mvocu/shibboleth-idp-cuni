@@ -76,7 +76,7 @@
                </ul>
            </section>
 
-           <div class="card mt-5">
+           <div class="card mt-4">
 
                <div class="card-body d-flex flex-row ">
                    <div class="me-4 mb-2">
@@ -89,11 +89,11 @@
                            <fieldset>
                            #end
                            <h5 class="accordion-header">
-                               <button class="accordion-button" type="button" data-mdb-toggle="collapse" data-mdb-target="c-$attribute" aria-expanded="true" aria-controls="collapseOne">
+                               <button class="accordion-button" type="button" data-mdb-toggle="collapse" data-mdb-target="c-$attribute.id" aria-expanded="true" aria-controls="collapseOne">
                                    $encoder.encodeForHTML($attributeDisplayNameFunction.apply($attribute))
                                </button>
                            </h5>
-                           <div class="accordion-collapse collapse show" id="c-$attribute" data-mdb-parent="attr-release">
+                           <div class="accordion-collapse collapse show" id="c-$attribute.id" data-mdb-parent="attr-release">
                                <div class="accordion-body">
                                    #foreach ($value in $attribute.values)
                                    #if ($replaceDollarWithNewline)
