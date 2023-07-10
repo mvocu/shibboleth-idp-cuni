@@ -59,7 +59,7 @@
                     #end
                             
                     #parse("login-error.vm")
-                <div class="form-outline mb-4">
+                <div class="form-outline mt-4 mb-4">
                     <label class="form-label" for="username">#springMessageText("idp.login.username", "Username")</label>
                     <input class="form-control" id="username" name="j_username" type="text"
                            value="#if($username)$encoder.encodeForHTML($username)#end" />
@@ -85,8 +85,10 @@
 
                 <div class="grid">
                     <div class="grid-item">
-                        <button class="btn btn-primary" type="submit" name="_eventId_proceed"
+                        <button class="btn btn-primary" type="submit" name="_eventId_proceed">
+                            <!--
                                 onClick="this.childNodes[0].nodeValue='#springMessageText('idp.login.pleasewait', 'Logging in, please wait...')'">
+                                -->
                         #springMessageText("idp.login.login", "Login")
                         </button>
                     </div>
