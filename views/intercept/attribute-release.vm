@@ -25,26 +25,8 @@
 #set ($rpOrganizationName = $rpUIContext.organizationDisplayName)
 #set ($replaceDollarWithNewline = true)
 ##
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>#springMessageText("idp.attribute-release.title", "Information Release")</title>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-        <link rel="stylesheet" type="text/css" href="$request.getContextPath()#springMessageText("idp.css", "/css/placeholder.css")">
-    </head>
-    <body>
 
-          <nav class="navbar navbar-expand-md fixed-top bg-white shadow-sm-strong">
-                <a class="navbar-brand flex-shrink-1" href="{{ url('/') }}">
-                    <img width="48" height="48" class="d-inline-block align-text-top main-logo" src="$request.getContextPath()#springMessageText("idp.logo", "/images/placeholder-logo.png")" alt="#springMessageText("idp.logo.alt-text", "logo")" />
-                    <span class="navbar-title">
-                	<span>#springMessageText("idp.title", "Identity Provider")</span><br/>
-                	<span class="subtitle">#springMessageText("root.title", "Central Authentication Service")</span>
-                </span>
-                </a>
-          </nav>
+#parse("header.vm")
 
           <form action="$flowExecutionUrl" method="post">
               #parse("csrf/csrf.vm")
@@ -178,5 +160,4 @@
 
           </form>
 
-    </body>
-</html>
+#parse("footer.vm")
