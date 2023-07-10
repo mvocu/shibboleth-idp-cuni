@@ -93,7 +93,7 @@
                                    $encoder.encodeForHTML($attributeDisplayNameFunction.apply($attribute))
                                </button>
                            </h5>
-                           <div class="accordion-collapse collapse-hide" id="c-$attribute" data-mdb-parent="attr-release">
+                           <div class="accordion-collapse collapse show" id="c-$attribute" data-mdb-parent="attr-release">
                                <div class="accordion-body">
                                    #foreach ($value in $attribute.values)
                                    #if ($replaceDollarWithNewline)
