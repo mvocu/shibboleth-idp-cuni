@@ -37,7 +37,7 @@
        <div class="d-flex flex-column col-lg-7 mt-5">
 
            <div class="border-bottom border-2 border-primary">
-               <h4 class="card-title">#springMessageText("idp.attribute-release.title", "Information Release")</h4>
+               <h4 class="">#springMessageText("idp.attribute-release.title", "Information Release")</h4>
            </div>
            <section class="mt-4">
                #if ($rpOrganizationLogo)
@@ -78,51 +78,50 @@
 
            <div class="card mt-5">
 
-               <div class="card-body">
+               <div class="card-body d-flex flex-row ">
+                   <div>
                    <h5 class="card-title">#springMessageText("idp.attribute-release.attributesHeader", "Information to be Provided to Service")</h5>
 
                    <div class="accordion mt-2 mb-2">
                    #foreach ($attribute in $attributeReleaseContext.getConsentableAttributes().values())
                        <div class="accordion-item">
+                           #if ($attributeReleaseFlowDescriptor.perAttributeConsentEnabled)
+                           <fieldset>
+                           #end
                            <h5 class="accordion-header ms-2">
-                   #if ($attributeReleaseFlowDescriptor.perAttributeConsentEnabled)
-                   <fieldset>
-                       <legend><p>$encoder.encodeForHTML($attributeDisplayNameFunction.apply($attribute))</p></legend>
-                   #else
-                   <p>$encoder.encodeForHTML($attributeDisplayNameFunction.apply($attribute))</p>
-                   #end
+                               <legend><p>$encoder.encodeForHTML($attributeDisplayNameFunction.apply($attribute))</p></legend>
                            </h5>
                            <div class="accordion-collapse collapse-hide">
                                <div class="accordion-body">
-                       #foreach ($value in $attribute.values)
-                       #if ($replaceDollarWithNewline)
-                       #set ($encodedValue = $encoder.encodeForHTML($value.getDisplayValue()).replaceAll($encoder.encodeForHTML('$'),"<br>"))
-                       #else
-                       #set ($encodedValue = $encoder.encodeForHTML($value.getDisplayValue()))
-                       #end
-                       <p>
-                           #if ($attributeReleaseFlowDescriptor.perAttributeConsentEnabled)
-                           <input id="$attribute.id" type="checkbox" name="_shib_idp_consentIds" value="$encoder.encodeForHTML($attribute.id)" checked>
-                           <label for="$attribute.id"><strong>$encodedValue</strong></label>
-                           #else
-                           <strong>$encodedValue</strong>
-                           <input id="$attribute.id" type="hidden" name="_shib_idp_consentIds" value="$encoder.encodeForHTML($attribute.id)" checked>
-                           #end
-                       </p>
-                       #end
+                                   #foreach ($value in $attribute.values)
+                                   #if ($replaceDollarWithNewline)
+                                   #set ($encodedValue = $encoder.encodeForHTML($value.getDisplayValue()).replaceAll($encoder.encodeForHTML('$'),"<br>"))
+                                   #else
+                                   #set ($encodedValue = $encoder.encodeForHTML($value.getDisplayValue()))
+                                   #end
+                                   <p>
+                                       #if ($attributeReleaseFlowDescriptor.perAttributeConsentEnabled)
+                                       <input id="$attribute.id" type="checkbox" name="_shib_idp_consentIds" value="$encoder.encodeForHTML($attribute.id)" checked>
+                                       <label for="$attribute.id"><strong>$encodedValue</strong></label>
+                                       #else
+                                       <strong>$encodedValue</strong>
+                                       <input id="$attribute.id" type="hidden" name="_shib_idp_consentIds" value="$encoder.encodeForHTML($attribute.id)" checked>
+                                       #end
+                                   </p>
+                                   #end
                                </div>
                            </div>
-                   #if ($attributeReleaseFlowDescriptor.perAttributeConsentEnabled)
-                   </fieldset>
-                   #end
+                           #if ($attributeReleaseFlowDescriptor.perAttributeConsentEnabled)
+                           </fieldset>
+                           #end
                        </div>
                    #end
-                   </fieldset>
                    </div>
-                   <p>#springMessageText("idp.attribute-release.confirmationQuestion", "The information above would be shared with the service if you proceed. Do you agree to release this information to the service every time you access it?")</p>
-               </div>
+                   <p class="card-text">#springMessageText("idp.attribute-release.confirmationQuestion", "The information above would be shared with the service if you proceed. Do you agree to release this information to the service every time you access it?")</p>
 
-               <div class="card-body">
+                   </div>
+
+                   <div>
                    <fieldset>
                        #if ($attributeReleaseFlowDescriptor.doNotRememberConsentAllowed || $attributeReleaseFlowDescriptor.globalConsentAllowed)
                        <h5 class="card-title">
@@ -161,16 +160,11 @@
                    #if ($attributeReleaseFlowDescriptor.doNotRememberConsentAllowed || $attributeReleaseFlowDescriptor.globalConsentAllowed)
                    <p>#springMessageText("idp.attribute-release.consentMethodRevoke", "This setting can be revoked at any time with the checkbox on the login page.")</p>
                    #end
-
+                   </div>
                </div>
-
-
            </div>
-
        </div>
-
    </main>
-
 </form>
 
 #parse("footer.vm")
