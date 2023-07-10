@@ -52,7 +52,7 @@
 
     <div class="d-flex flex-column col-lg-7 mt-5">
         <div class="border-bottom border-2 border-primary">
-            <h4>$title - $titleSuffix</h4>
+            <h4>$titleSuffix</h4>
         </div>
         <section class="alert alert-warning mt-2">
             <p>#evaluate($message)</p>
