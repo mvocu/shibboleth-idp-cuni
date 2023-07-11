@@ -16,46 +16,29 @@
 ##
 #set ($activeIdPSessions = $logoutContext and !$logoutContext.getIdPSessions().isEmpty())
 #set ($activeSPSessions = $logoutContext and !$logoutContext.getSessionMap().isEmpty())
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>#springMessageText("idp.title", "Web Login Service")</title>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-        <link rel="stylesheet" type="text/css" href="$request.getContextPath()#springMessageText("idp.css", "/css/placeholder.css")">
-    </head>
 
-    <body>
-        <main class="main">
-            <header>
-                <img class="main-logo" src="$request.getContextPath()#springMessageText("idp.logo", "/images/placeholder-logo.png")" alt="#springMessageText("idp.logo.alt-text", "logo")" />
-            </header>
-            
-            <section>
+#parse ("header.vm")
+
+<main class="d-flex flex-md-row flex-column container-fluid justify-content-center" style="margin-top: 64px" id="content">
+    <div class="d-flex flex-column col-lg-4 mt-5">
+        <div class="card">
+            <div class="card-body">
+
             #if ($activeIdPSessions)
-                <h2>#springMessageText("idp.logout.cancelled", "Logout has been cancelled.")</h2>
+                <h4 class="card-title">#springMessageText("idp.logout.cancelled", "Logout has been cancelled.")</h4>
             #elseif ($activeSPSessions)
-                <p>#springMessageText("idp.logout.local", "You elected not to log out of all the applications accessed during your session.")</p>
+                <p class="card-text">#springMessageText("idp.logout.local", "You elected not to log out of all the applications accessed during your session.")</p>
             #else
-                <p>#springMessageText("idp.logout.complete", "The logout operation is complete, and no other services appear to have been accessed during this session.")</p>
+                <p class="card-text">#springMessageText("idp.logout.complete", "The logout operation is complete, and no other services appear to have been accessed during this session.")</p>
             #end
             
-                <ul>
-                    <li><a href="#springMessageText("idp.url.password.reset", '#')">#springMessageText("idp.login.forgotPassword", "Forgot your password?")</a></li>
-                    <li><a href="#springMessageText("idp.url.helpdesk", '#')">#springMessageText("idp.login.needHelp", "Need Help?")</a></li>
-                </ul>
-                
               <!-- If SAML logout, complete the flow by adding a hidden iframe. -->
               #if ( $profileRequestContext.getProfileId().contains("saml2/logout") )
                   <iframe style="display:none" src="$flowExecutionUrl&_eventId=proceed"></iframe>
               #end
-            </section>
-        </main>
-        <footer class="footer">
-            <div class="cc">
-                <p>#springMessageText("idp.footer", "Insert your footer text here.")</p>
             </div>
-        </footer>
- 	</body>
-</html>
+        </div>
+    </div>
+</main>
+
+#parse ("footer.vm")
