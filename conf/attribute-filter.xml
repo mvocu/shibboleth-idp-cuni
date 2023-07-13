@@ -130,7 +130,7 @@ GAIN later on) -->
 	    	<Rule xsi:type="ValueRegex" regex="^http:.*$" />
 		<Rule xsi:type="ValueRegex" regex="^urn:mace:.*$" />
 		<Rule xsi:type="ValueRegex" regex="^urn:wkhmr:.*$" />
-		<Rule xsi:type="Value" value="urn:cuni:affiliation:external" />
+		<Rule xsi:type="ValueRegex" regex="^urn:cuni:affiliation:.*$" />
 	    </PermitValueRule>
        </AttributeRule>
 
