@@ -72,7 +72,8 @@
 
     </AttributeFilterPolicy>
 
-    <!-- Release to eduGAIN members (with exceptions) -->
+    <!-- Release to eduGAIN members (with exceptions) and 4EU+ (should be in edu
+GAIN later on) -->
     <!--
 	eduPersonTargetedId
 	mail
@@ -83,10 +84,14 @@
 	schacHomeOrg
 	schacHomeOrgType
 	eduPersonUniqueId
+	eduPersonAssurance
     -->
     <AttributeFilterPolicy id="releaseToEduGain">
 	
-        <PolicyRequirementRule xsi:type="InEntityGroup"  groupID="http://edugain.org/" />
+        <PolicyRequirementRule xsi:type="OR">
+                <Rule xsi:type="InEntityGroup"  groupID="http://edugain.org/" />
+                <Rule xsi:type="InEntityGroup"  groupID="https://4euplus.org/" />
+        </PolicyRequirementRule>
 
         <AttributeRule attributeID="eduPersonTargetedID">
             <PermitValueRule xsi:type="ANY" />
@@ -133,13 +138,29 @@
             <PermitValueRule xsi:type="ANY" />
        </AttributeRule>
 
-
+        <AttributeRule attributeID="eduPersonAssurance">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
+        </AttributeRule>
 
     </AttributeFilterPolicy>
 
 
     <!-- Exceptions from the eduGAIN standard release -->
 
+   <!-- Release ESI to ESI entity category and 4EU+ -->
+    <AttributeFilterPolicy id="ESI">
+        <PolicyRequirementRule xsi:type="OR">
+                <Rule xsi:type="EntityAttributeExactMatch"
+                        attributeName="http://macedir.org/entity-category"
+                        attributeValue="https://myacademicid.org/entity-categories/esi" />
+                <Rule xsi:type="InEntityGroup"  groupID="https://4euplus.org/" />
+        </PolicyRequirementRule>
+
+        <AttributeRule attributeID="schacPersonalUniqueCode">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
+
+    </AttributeFilterPolicy>
 
     <!-- CLARIN ideal set - eduPersonPrincipalName -->
     <AttributeFilterPolicy id="clarin">
@@ -600,6 +621,9 @@
 	    <Rule xsi:type="Requester" value="https://digitool.is.cuni.cz/shibboleth" />
             <Rule xsi:type="Requester" value="https://ckis.cuni.cz/shibboleth" />
 	    <Rule xsi:type="Requester" value="https://www.cuni.cz/shibboleth" />
+            <Rule xsi:type="Requester" value="https://cards-test.is.cuni.cz/shibboleth" />
+            <Rule xsi:type="Requester" value="https://cards.is.cuni.cz/shibboleth" />
+
  	</PolicyRequirementRule>
 
         <AttributeRule attributeID="cuniPersonalId">
@@ -624,9 +648,12 @@
 		<Rule xsi:type="Requester" value="https://shongo-auth-dev.cesnet.cz/sp" />
 		<Rule xsi:type="Requester" value="https://au.cesnet.cz/sp/shibboleth" />
 		<Rule xsi:type="Requester" value="https://camelot.lf2.cuni.cz/shibboleth" />
+                <Rule xsi:type="Requester" value="https://lef150.lf2.cuni.cz/shibboleth" />
 		<Rule xsi:type="Requester" value="https://auth.lf2.cuni.cz/shibboleth" />
 		<Rule xsi:type="Requester" value="https://www.lf2.cuni.cz/shibboleth" />
-		<Rule xsi:type="Requester" value="https://kw.lf2.cuni.cz/shibboleth" />
+                <Rule xsi:type="Requester" value="https://kw.lf2.cuni.cz/shibboleth" />
+                <Rule xsi:type="Requester" value="https://dpl8.lf2.cuni.cz/shibboleth" />
+                <Rule xsi:type="Requester" value="https://lef.lf2.cuni.cz/shibboleth" />
 		<Rule xsi:type="Requester" value="https://vidcon.cesnet.cz/sp/shibboleth" />
 		<Rule xsi:type="Requester" value="https://owncloud.cesnet.cz/saml/sp" />
 		<Rule xsi:type="Requester" value="https://shongo-auth.cesnet.cz/shibboleth" />
@@ -648,6 +675,14 @@
 		<Rule xsi:type="Requester" value="https://scs.it4i.cz/shibboleth" />
 	 	<Rule xsi:type="Requester" value="https://ais-ap1tst.is.cuni.cz/shibboleth" />
 		<Rule xsi:type="Requester" value="https://corpora.uclouvain.be/cecl/icle/shibboleth" />
+                <Rule xsi:type="Requester" value="https://cuni.alma.exlibrisgroup.com/mng/login" />
+                <Rule xsi:type="Requester" value="https://cuni.primo.exlibrisgroup.com/mng/login" />
+                <Rule xsi:type="Requester" value="https://cards-test.is.cuni.cz/shibboleth" />
+                <Rule xsi:type="Requester" value="https://cards.is.cuni.cz/shibboleth" />
+                <Rule xsi:type="Requester" value="https://federation.nih.gov/FederationGateway" />
+                <Rule xsi:type="Requester" value="https://shibboleth.cuni.fenomio.stream/shibboleth" />
+                <Rule xsi:type="Requester" value="https://ffws05.ff.cuni.cz/shibboleth" />
+                <Rule xsi:type="InEntityGroup"  groupID="https://4euplus.org/" />
 	</PolicyRequirementRule>
 
         <AttributeRule attributeID="eduPersonPrincipalName">
@@ -685,6 +720,7 @@
         <PolicyRequirementRule xsi:type="OR">
 	        <Rule xsi:type="Requester" value="https://shibboleth.lf1.cuni.cz/shibboleth/" />
 	        <Rule xsi:type="Requester" value="https://shibboleth2.lf1.cuni.cz/shibboleth/" />
+                <Rule xsi:type="Requester" value="https://shibboleth3.lf1.cuni.cz/shibboleth" />
         </PolicyRequirementRule>
 
 
@@ -716,7 +752,10 @@
 
     <!-- eduPersonEntitlement with handicap to DSpace -->
     <AttributeFilterPolicy id="release_epe_dspace">
-        <PolicyRequirementRule xsi:type="Requester" value="https://dspace.cuni.cz/shibboleth" />
+        <PolicyRequirementRule xsi:type="OR">
+                <Rule xsi:type="Requester" value="https://dspace.cuni.cz/shibboleth" />
+                <Rule xsi:type="Requester" value="https://gull.is.cuni.cz/shibboleth" />
+        </PolicyRequirementRule>
 
         <AttributeRule attributeID="eduPersonEntitlement">
                 <PermitValueRule xsi:type="ANY" />
