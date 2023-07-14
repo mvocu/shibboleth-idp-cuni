@@ -130,6 +130,7 @@ GAIN later on) -->
 	    	<Rule xsi:type="ValueRegex" regex="^http:.*$" />
 		<Rule xsi:type="ValueRegex" regex="^urn:mace:.*$" />
 		<Rule xsi:type="ValueRegex" regex="^urn:wkhmr:.*$" />
+                <Rule xsi:type="ValueRegex" regex="^urn:geant:.*$" />
 		<Rule xsi:type="ValueRegex" regex="^urn:cuni:affiliation:.*$" />
 	    </PermitValueRule>
        </AttributeRule>
@@ -691,7 +692,7 @@ GAIN later on) -->
 
     </AttributeFilterPolicy>
 
-    <!-- cuniStudyProgram, cuniStudySubject, cuniScopedAffiliation
+    <!-- cuniStudyProgram, cuniStudySubject, cuniPersonScopedAffiliation
 	   to onelog3 & ezproxy -->
     <AttributeFilterPolicy id="release_cuni_study" >
         <PolicyRequirementRule xsi:type="OR">
@@ -709,7 +710,7 @@ GAIN later on) -->
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
-	<AttributeRule attributeID="cuniScopedAffiliation">
+	<AttributeRule attributeID="cuniPersonScopedAffiliation">
 	    <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 	
@@ -880,7 +881,7 @@ GAIN later on) -->
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
-	<AttributeRule attributeID="cuniScopedAffiliation">
+	<AttributeRule attributeID="cuniPersonScopedAffiliation">
 	    <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 

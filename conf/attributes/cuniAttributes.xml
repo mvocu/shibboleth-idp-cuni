@@ -105,7 +105,7 @@
         <bean parent="shibboleth.TranscodingProperties">
             <property name="properties">
                 <props merge="true">
-                    <prop key="id">cuniScopedAffiliation</prop>
+                    <prop key="id">cuniPersonScopedAffiliation</prop>
                     <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder CASStringTranscoder</prop>
                     <prop key="saml2.name">http://cas.cuni.cz/attrs/cuniPersonScopedAffiliation</prop>
                     <prop key="saml1.name">http://cas.cuni.cz/attrs/cuniPersonScopedAffiliation</prop>
