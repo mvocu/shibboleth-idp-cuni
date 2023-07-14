@@ -72,8 +72,7 @@
 
     </AttributeFilterPolicy>
 
-    <!-- Release to eduGAIN members (with exceptions) and 4EU+ (should be in edu
-GAIN later on) -->
+    <!-- Release to eduGAIN members (with exceptions) and 4EU+ (should be in eduGAIN later on) -->
     <!--
 	eduPersonTargetedId
 	mail
@@ -327,12 +326,14 @@ GAIN later on) -->
 		    <Rule xsi:type="Requester" value="https://login.ezproxy.is.cuni.cz/sp/shibboleth" />
 		    <Rule xsi:type="Requester" value="https://ais-ap1tst.is.cuni.cz/shibboleth" />
                 </Rule>
+<!-- try to remove exceptions
                 <Rule xsi:type="NOT">
                      <Rule xsi:type="OR">
 			<Rule xsi:type="Requester" value="https://www2.foodle.cz/sp" />
 			<Rule xsi:type="Requester" value="http://shibboleth.ebscohost.com" />
                      </Rule>
                 </Rule>
+-->
         </PolicyRequirementRule>
 
 	<AttributeRule attributeID="organizationName">
@@ -429,12 +430,29 @@ GAIN later on) -->
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
+        <AttributeRule attributeID="eduPersonAssurance">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonPrincipalName">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
+
+       <AttributeRule attributeID="schacHomeOrg">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
+
+       <AttributeRule attributeID="schacHomeOrgType">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
+
     </AttributeFilterPolicy>
 
 
     <!-- Exceptions from the standard federation release set -->
 
     <!-- Foodle.cz -->
+    <!-- standard federation attributes without targeted id -->
     <AttributeFilterPolicy id="releaseToFoodle">
         <PolicyRequirementRule xsi:type="Requester" value="https://www2.foodle.cz/sp" />
 
@@ -636,6 +654,7 @@ GAIN later on) -->
     <!-- eduPersonPrincipalName -->
     <AttributeFilterPolicy id="release_eppn" >
 	<PolicyRequirementRule xsi:type="OR">
+<!-- try to remove exceptions for ePPN
         	<Rule xsi:type="Requester" value="https://meta.cesnet.cz/sp/shibboleth" />
         	<Rule xsi:type="Requester" value="https://www.metacentrum.cz/sp/shibboleth" />
 		<Rule xsi:type="Requester" value="https://www.mizar.cz/shibboleth/cztestfed/sp" />
@@ -675,14 +694,15 @@ GAIN later on) -->
 		<Rule xsi:type="Requester" value="https://exafs.cesnet.cz/shibboleth" />
 		<Rule xsi:type="Requester" value="https://scs.it4i.cz/shibboleth" />
 	 	<Rule xsi:type="Requester" value="https://ais-ap1tst.is.cuni.cz/shibboleth" />
-		<Rule xsi:type="Requester" value="https://corpora.uclouvain.be/cecl/icle/shibboleth" />
-                <Rule xsi:type="Requester" value="https://cuni.alma.exlibrisgroup.com/mng/login" />
-                <Rule xsi:type="Requester" value="https://cuni.primo.exlibrisgroup.com/mng/login" />
                 <Rule xsi:type="Requester" value="https://cards-test.is.cuni.cz/shibboleth" />
                 <Rule xsi:type="Requester" value="https://cards.is.cuni.cz/shibboleth" />
-                <Rule xsi:type="Requester" value="https://federation.nih.gov/FederationGateway" />
                 <Rule xsi:type="Requester" value="https://shibboleth.cuni.fenomio.stream/shibboleth" />
                 <Rule xsi:type="Requester" value="https://ffws05.ff.cuni.cz/shibboleth" />
+-->
+                <Rule xsi:type="Requester" value="https://cuni.primo.exlibrisgroup.com/mng/login" />
+                <Rule xsi:type="Requester" value="https://cuni.alma.exlibrisgroup.com/mng/login" />
+		<Rule xsi:type="Requester" value="https://corpora.uclouvain.be/cecl/icle/shibboleth" />
+                <Rule xsi:type="Requester" value="https://federation.nih.gov/FederationGateway" />
                 <Rule xsi:type="InEntityGroup"  groupID="https://4euplus.org/" />
 	</PolicyRequirementRule>
 
