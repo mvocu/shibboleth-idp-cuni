@@ -43,7 +43,7 @@ list of possible components and their options.
 	eduPersonScopedAffiliation
     -->
     <AttributeDefinition id="eduPersonScopedAffiliation" xsi:type="Scoped" scope="%{idp.scope}">
-        <InputAttributeDefinition ref="eduPersonAffiliation" />
+        <InputDataConnector ref="scriptedAttributes" attributeNames="eduPersonAffiliation" />
     </AttributeDefinition>
 
     <!--
@@ -175,9 +175,11 @@ list of possible components and their options.
     <!--
     This is an example of an attribute sourced from a data connector.
     -->
+    <!--
     <AttributeDefinition id="eduPersonScopedAffiliation" xsi:type="Scoped" scope="%{idp.scope}">
         <InputDataConnector ref="staticAttributes" attributeNames="affiliation" />
     </AttributeDefinition>
+    -->
 
 
     <!-- ========================================== -->

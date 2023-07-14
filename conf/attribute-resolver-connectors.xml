@@ -28,7 +28,7 @@
         eduPersonAssurance
     -->
     <DataConnector id="staticAttributes" xsi:type="Static"
-	exportAttributes="o eduPersonOrgDN schacHomeOrg schacHomeOrgType">
+	exportAttributes="o eduPersonOrgDN schacHomeOrganization schacHomeOrganizationType">
 
         <Attribute id="o">
             <Value>Charles University</Value>
@@ -49,10 +49,10 @@
             <!-- assigned only to specific user categories -->
             <!-- <Value>https://refeds.org/assurance/profile/espresso</Value> -->
         </Attribute>
-        <Attribute id="schacHomeOrg">
+        <Attribute id="schacHomeOrganization">
             <Value>cuni.cz</Value>
         </Attribute>
-        <Attribute id="schacHomeOrgType">
+        <Attribute id="schacHomeOrganizationType">
             <Value>urn:mace:terena.org:schac:homeOrganizationType:int:university</Value>
         </Attribute>
     </DataConnector>
