@@ -80,8 +80,8 @@
 	givenName
 	sn
 	eduPersonScopedAffiliation
-	schacHomeOrg
-	schacHomeOrgType
+	schacHomeOrganization
+	schacHomeOrganizationType
 	eduPersonUniqueId
 	eduPersonAssurance
     -->
@@ -116,11 +116,11 @@
 	    <PermitValueRule xsi:type="ANY" />
 	</AttributeRule>
 
-       <AttributeRule attributeID="schacHomeOrg">
+       <AttributeRule attributeID="schacHomeOrganization">
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
-       <AttributeRule attributeID="schacHomeOrgType">
+       <AttributeRule attributeID="schacHomeOrganizationType">
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
@@ -280,8 +280,8 @@
         	</PermitValueRule>
     	</AttributeRule>
  
-    	<!-- schacHomeOrg -->
-    	<AttributeRule attributeID="schacHomeOrg">
+    	<!-- schacHomeOrganization -->
+    	<AttributeRule attributeID="schacHomeOrganization">
        		<PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true" />
     	</AttributeRule>
  
@@ -304,7 +304,7 @@
 	eduPersonPrimaryOrgUnitDN
 	eduPersonPrimaryAffiliation
 	mefaPerson
-	schacHomeOrg
+	schacHomeOrganization
 	commonNameASCII
 	unstructuredName
 	authorizedMail
@@ -402,7 +402,7 @@
 	    <PermitValueRule xsi:type="ANY" />
 	</AttributeRule>
 
-       <AttributeRule attributeID="schacHomeOrg">
+       <AttributeRule attributeID="schacHomeOrganization">
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
@@ -438,11 +438,11 @@
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
-       <AttributeRule attributeID="schacHomeOrg">
+       <AttributeRule attributeID="schacHomeOrganization">
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
-       <AttributeRule attributeID="schacHomeOrgType">
+       <AttributeRule attributeID="schacHomeOrganizationType">
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
@@ -522,7 +522,7 @@
 	    <PermitValueRule xsi:type="ANY" />
 	</AttributeRule>
 
-       <AttributeRule attributeID="schacHomeOrg">
+       <AttributeRule attributeID="schacHomeOrganization">
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
@@ -607,7 +607,7 @@
 	    <PermitValueRule xsi:type="ANY" />
 	</AttributeRule>
 
-       <AttributeRule attributeID="schacHomeOrg">
+       <AttributeRule attributeID="schacHomeOrganization">
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
@@ -877,7 +877,7 @@
 	    <PermitValueRule xsi:type="ANY" />
 	</AttributeRule>
 
-       <AttributeRule attributeID="schacHomeOrg">
+       <AttributeRule attributeID="schacHomeOrganization">
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
