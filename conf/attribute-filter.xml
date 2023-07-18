@@ -180,7 +180,7 @@
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
-        <AttributeRule attributeID="organizationName">
+        <AttributeRule attributeID="o">
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
     </AttributeFilterPolicy>
@@ -336,7 +336,7 @@
 -->
         </PolicyRequirementRule>
 
-	<AttributeRule attributeID="organizationName">
+	<AttributeRule attributeID="o">
 	    <PermitValueRule xsi:type="ANY" />
 	</AttributeRule>
 
@@ -452,7 +452,7 @@
     <AttributeFilterPolicy id="releaseToEBSCO">
         <PolicyRequirementRule xsi:type="Requester" value="http://shibboleth.ebscohost.com" />
 
-	<AttributeRule attributeID="organizationName">
+	<AttributeRule attributeID="o">
 	    <PermitValueRule xsi:type="ANY" />
 	</AttributeRule>
 
@@ -714,7 +714,7 @@
 		<Rule xsi:type="Requester" value="https://ldapuser.cuni.cz/shibboleth" />
 	</PolicyRequirementRule>
 
-	<AttributeRule attributeID="organizationName">
+	<AttributeRule attributeID="o">
 	    <PermitValueRule xsi:type="ANY" />
 	</AttributeRule>
 
