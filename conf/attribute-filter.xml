@@ -708,6 +708,7 @@
     <!-- release everything to ldapX.cuni.cz -->
     <AttributeFilterPolicy id="release_to_ldaps">
         <PolicyRequirementRule xsi:type="OR">
+                <Rule xsi:type="InEntityGroup" groupID="urn:mace:cesnet.cz:cuni-internal" />
 		<Rule xsi:type="Requester" value="https://ldap1.cuni.cz/shibboleth" />
 		<Rule xsi:type="Requester" value="https://ldap2.cuni.cz/shibboleth" />
 		<Rule xsi:type="Requester" value="https://ldap3.cuni.cz/shibboleth" />
