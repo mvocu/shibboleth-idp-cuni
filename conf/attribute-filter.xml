@@ -705,8 +705,8 @@
     <AttributeFilterPolicy id="release_epe_special_needs">
 
         <PolicyRequirementRule xsi:type="OR">
-                <Rule xsi:type="Requester" value="https://dspace.cuni.cz/shibboleth" />
-                <Rule xsi:type="Requester" value="https://gull.is.cuni.cz/shibboleth" />
+                <Rule xsi:type="Requester" value="https://login.ceskadigitalniknihovna.cz/realms/kramerius" />
+                <Rule xsi:type="Requester" value="https://login.kramerius.mzk.cz/realms/kramerius" />
         </PolicyRequirementRule>
 
         <AttributeRule attributeID="eduPersonEntitlement">
