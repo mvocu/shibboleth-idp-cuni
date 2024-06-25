@@ -21,9 +21,9 @@
     </util:list>
 
     <util:list id ="shibboleth.AttributeResolverResources">
-        <value>%{idp.home}/conf/attribute-resolver.xml</value>
         <value>%{idp.home}/conf/attribute-resolver-connectors.xml</value>
         <value>%{idp.home}/conf/attribute-resolver-scripted.xml</value>
+        <value>%{idp.home}/conf/attribute-resolver.xml</value>
     </util:list>
 
     <!--

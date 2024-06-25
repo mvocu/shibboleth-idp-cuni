@@ -139,6 +139,13 @@
 	</MetadataFilter>
  
     </MetadataProvider> 
+
+    <MetadataProvider id="cuni_internal"
+                      xsi:type="FileBackedHTTPMetadataProvider"
+                      metadataURL="https://metadata.eduid.cz/entities/cuni-internal"
+                      backingFile="%{idp.home}/metadata/cuni-internal-metadata.xml" >
+
+    </MetadataProvider>
     
     <MetadataProvider id="ldap3-metadata"  xsi:type="FilesystemMetadataProvider" metadataFile="%{idp.home}/metadata/ldap3-metadata.xml"/>
     <MetadataProvider id="ldapuser-metadata"  xsi:type="FilesystemMetadataProvider" metadataFile="%{idp.home}/metadata/ldapuser-metadata.xml"/>

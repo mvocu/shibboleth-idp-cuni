@@ -243,6 +243,10 @@
                                                         for(i = 0; i < handicap.size(); i++) {
                                                                 values.add(new StringAttributeValue("urn:cuni:handicap:" + handicap.get(i)));
                                                         }
+                                                        if(typeof(cuniConsent) != "undefined" &&
+                                                           cuniConsent.getValues().contains("urn:cuni:consent:handicap")) {
+                                                                values.add(new StringAttributeValue("urn:mace:dir:entitlement:special-needs"));
+                                                        }
                                               }
                                               
 					      
