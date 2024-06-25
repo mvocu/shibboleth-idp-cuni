@@ -243,6 +243,7 @@
                                                         for(i = 0; i < handicap.size(); i++) {
                                                                 values.add(new StringAttributeValue("urn:cuni:handicap:" + handicap.get(i)));
                                                         }
+                                                        values.add(new StringAttributeValue("urn:mace:dir:entitlement:special-needs"));
                                               }
                                               
 					      
