@@ -745,6 +745,13 @@
         <AttributeRule attributeID="eduPersonPrincipalName">
             <DenyValueRule xsi:type="ANY"/>
         </AttributeRule>
+        <AttributeRule attributeID="eduPersonUniqueId">
+            <DenyValueRule xsi:type="ANY"/>
+        </AttributeRule>
+        <AttributeRule attributeID="unstructuredName">
+            <DenyValueRule xsi:type="ANY"/>
+        </AttributeRule>
+
 
     </AttributeFilterPolicy>
 
