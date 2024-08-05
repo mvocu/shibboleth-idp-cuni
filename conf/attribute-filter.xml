@@ -709,9 +709,12 @@
     <!-- eduPersonEntitlement with special-needs to selected SPs, pseudonymized -->
     <AttributeFilterPolicy id="release_epe_special_needs">
 
-        <PolicyRequirementRule xsi:type="OR">
-            <Rule xsi:type="Requester" value="https://login.ceskadigitalniknihovna.cz/realms/kramerius" />
-            <Rule xsi:type="Requester" value="https://login.kramerius.mzk.cz/realms/kramerius" />
+        <PolicyRequirementRule xsi:type="AND">
+            <Rule xsi:type="OR">
+                <Rule xsi:type="Requester" value="https://login.ceskadigitalniknihovna.cz/realms/kramerius" />
+                <Rule xsi:type="Requester" value="https://login.kramerius.mzk.cz/realms/kramerius" />
+            </Rule>
+            <Rule xsi:type="Value" value="urn:mace:dir:entitlement:special-needs" caseSensitive="false" />
         </PolicyRequirementRule>
 
         <AttributeRule attributeID="eduPersonEntitlement">
