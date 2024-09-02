@@ -106,9 +106,11 @@ list of possible components and their options.
     <!--
         schacPersonalUniqueCode
     --> 
+    <!--
     <AttributeDefinition id="schacPersonalUniqueCode" xsi:type="Simple">
         <InputDataConnector ref="cuniLDAP" attributeNames="cuniUniqueId" />
     </AttributeDefinition>
+    -->
 
     <!--
         ImmutableID

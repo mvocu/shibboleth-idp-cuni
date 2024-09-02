@@ -16,7 +16,7 @@
                             urn:mace:shibboleth:2.0:security http://shibboleth.net/schema/idp/shibboleth-security.xsd">
 
     <DataConnector id="scriptedAttributes" xsi:type="ScriptedDataConnector"
-	exportAttributes="eduPersonAffiliation eduPersonEntitlement cuniPersonScopedAffiliation mefaPerson authorizedMail eduPersonAssurance" >
+	exportAttributes="eduPersonAffiliation eduPersonEntitlement cuniPersonScopedAffiliation mefaPerson authorizedMail eduPersonAssurance schacPersonalUniqueCode" >
 
         <InputDataConnector ref="cuniLDAP" allAttributes="true" />
 
@@ -612,6 +612,23 @@
 
                               attr.setValues(values);
                               connectorResults.add(attr);
+
+
+           // ------------------------------
+           //  schacPersonalUniqueCode
+           // ------------------------------
+
+                              attr = new IdpAttribute("schacPersonalUniqueCode");
+                              values = new HashSet();
+
+                              if(typeof(cuniPersonalId) != "undefined") {
+                                    value = "urn:schac:personalUniqueCode:int:esi:cuni.cz:" + cuniPersonalId.getValues().get(0);
+                                    values.add(new StringAttributeValue(value));
+                              }
+
+                              attr.setValues(values);
+                              connectorResults.add(attr);
+
 
            ]]>
 
