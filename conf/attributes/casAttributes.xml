@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+                           
+       default-init-method="initialize"
+       default-destroy-method="destroy">
+       
+    <bean parent="shibboleth.TranscodingRuleLoader">
+    <constructor-arg>
+    <list>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">credentialType</prop>
+                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="saml2.name">http://cas.cuni.cz/attrs/cas/credentialType</prop>
+                    <prop key="displayName.en">Credential type</prop>
+                    <prop key="displayName.cs">Typ přihlášení</prop>
+                    <prop key="description.en">Credential type used to authenticate the user</prop>
+                    <prop key="description.cs">Typ přihlášení použitý uživatelem</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">bypassMultifactorAuthentication</prop>
+                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="saml2.name">http://cas.cuni.cz/attrs/cas/bypassMultifactorAuthentication</prop>
+                    <prop key="displayName.en">MFA bypass</prop>
+                    <prop key="displayName.cs">Vynechání MFA</prop>
+                    <prop key="description.en">Indicates whether MFA was skipped</prop>
+                    <prop key="description.cs">Označuje vynechání MFA autentizace</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">authnContextClass</prop>
+                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="saml2.name">http://cas.cuni.cz/attrs/cas/authnContextClass</prop>
+                    <prop key="displayName.en">Authentication method name</prop>
+                    <prop key="displayName.cs">Jméno metody přihlášení</prop>
+                    <prop key="description.en">Names the authentication method used</prop>
+                    <prop key="description.cs">Jméno použité autentizační metody</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">successfulAuthenticationHandlers</prop>
+                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="saml2.name">http://cas.cuni.cz/attrs/cas/successfulAuthenticationHandlers</prop>
+                    <prop key="displayName.en">Successful authentication handler</prop>
+                    <prop key="displayName.cs">Použitá metoda přihlášení</prop>
+                    <prop key="description.en">Name of the last successful authentication handler</prop>
+                    <prop key="description.cs">Jméno poslední úspěšné metody přihlášení</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">isFromTrustedMultifactorAuthentication</prop>
+                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="saml2.name">http://cas.cuni.cz/attrs/cas/isFromTrustedMultifactorAuthentication</prop>
+                    <prop key="displayName.en">Trusted MFA</prop>
+                    <prop key="displayName.cs">MFA z důvěryhodného zařízení</prop>
+                    <prop key="description.en">Used trusted device in the MFA context</prop>
+                    <prop key="description.cs">Ověření MFA proběhlo na základě důvěryhodného zařízení</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">authenticationMethod</prop>
+                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="saml2.name">http://cas.cuni.cz/attrs/cas/authenticationMethod</prop>
+                    <prop key="displayName.en">Successful authentication method</prop>
+                    <prop key="displayName.cs">Použitá metoda přihlášení</prop>
+                    <prop key="description.en">Name of the last successful authentication method</prop>
+                    <prop key="description.cs">Jméno poslední úspěšné metody přihlášení</prop>
+                </props>
+            </property>
+        </bean>
+
+    </list>
+    </constructor-arg>
+    </bean>
+    
+</beans>
+

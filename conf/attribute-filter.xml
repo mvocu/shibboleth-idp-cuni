@@ -28,6 +28,30 @@
 
     </AttributeFilterPolicy>
 
+
+    <!-- authentication context attributes are released to anyone -->
+    <AttributeFilterPolicy id="releaseAuthnContextAlways">
+       <PolicyRequirementRule xsi:type="ANY" />
+
+       <AttributeRule attributeID="authnContextClass">
+          <PermitValueRule xsi:type="ANY" />
+       </AttributeRule>
+
+       <AttributeRule attributeID="authenticationMethod">
+          <PermitValueRule xsi:type="ANY" />
+       </AttributeRule>
+
+       <AttributeRule attributeID="isFromTrustedMultifactorAuthentication">
+          <PermitValueRule xsi:type="ANY" />
+       </AttributeRule>
+
+       <AttributeRule attributeID="bypassMultifactorAuthentication">
+          <PermitValueRule xsi:type="ANY" />
+       </AttributeRule>
+
+    </AttributeFilterPolicy>
+
+
     <!-- Release googlePrincipal to google -->
     <AttributeFilterPolicy id="releaseToGoogle">
 	<PolicyRequirementRule xsi:type="InEntityGroup"  groupID="https://www.google.com/" />

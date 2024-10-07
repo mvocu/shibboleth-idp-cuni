@@ -170,17 +170,24 @@
                 requireValidMetadata="false" />
     
     <!-- SAML test metadata provider -->
+    <!--
     <MetadataProvider id="SAMLtest"
         xsi:type="FileBackedHTTPMetadataProvider"
         backingFile="%{idp.home}/metadata/SAMLtest.xml"
         metadataURL="https://samltest.id/saml/sp">
-      <!-- You should always check the signature and freshness of remote
-              metadata.  It's commented out until you get the basics working.
            <MetadataFilter xsi:type="SignatureValidation" 
                   certificateFile="%{idp.home}/credentials/signet.crt" />
            <MetadataFilter xsi:type="RequiredValidUntil" maxValidityInterval="P30D"/>
-        -->
     </MetadataProvider>
+    -->
+
+    <!-- CEEOL test metadata provider -->
+    <!-- metadataURL="https://www.ceeol.com/Shibboleth.sso/Metadata" -->
+    <MetadataProvider id="ceeol-metadata"
+                      xsi:type="FilesystemMetadataProvider"
+                      metadataFile="%{idp.home}/metadata/ceeol-metadata.xml" />
+
+
     
     <!--
     Example HTTP metadata provider.  Use this if you want to download the metadata

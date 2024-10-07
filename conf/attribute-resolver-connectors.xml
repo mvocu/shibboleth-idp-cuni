@@ -69,7 +69,9 @@
 	<InputDataConnector ref="cuniLDAP" attributeNames="cuniPersonalId" />
     </DataConnector>
 
+
     <!-- CUNI LDAP Connector -->
+    <!-- -->
     <DataConnector id="cuniLDAP" xsi:type="LDAPDirectory"
         ldapURL="%{idp.attribute.resolver.LDAP.ldapURL}"
         baseDN="%{idp.attribute.resolver.LDAP.baseDN}" 
@@ -102,6 +104,6 @@
             expirationTime="%{idp.pool.LDAP.idleTime:PT10M}"/>
     </DataConnector>
 
-    <DataConnector id="passthroughAttributes" xsi:type="Subject" exportAttributes="user authenticationMethod" />
+    <DataConnector id="passthroughAttributes" xsi:type="Subject" exportAttributes="user authenticationMethod credentialType bypassMultifactorAuthentication isFromTrustedMultifactorAuthentication authnContextClass" />
 
 </AttributeResolver>
