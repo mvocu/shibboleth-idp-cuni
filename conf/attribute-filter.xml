@@ -204,7 +204,7 @@
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
-        <AttributeRule attributeID="organizationName">
+        <AttributeRule attributeID="o">
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
     </AttributeFilterPolicy>
@@ -360,7 +360,7 @@
 -->
         </PolicyRequirementRule>
 
-	<AttributeRule attributeID="organizationName">
+	<AttributeRule attributeID="o">
 	    <PermitValueRule xsi:type="ANY" />
 	</AttributeRule>
 
@@ -394,7 +394,10 @@
 
         <AttributeRule attributeID="eduPersonEntitlement">
             <PermitValueRule xsi:type="NOT">
-                <Rule xsi:type="ValueRegex" regex="^urn:cuni:handicap:.*$" />
+		<Rule xsi:type="OR">
+                    <Rule xsi:type="ValueRegex" regex="^urn:cuni:handicap:.*$" />
+                    <Rule xsi:type="Value" value="urn:mace:dir:entitlement:special-needs" caseSensitive="false" />
+                </Rule>
             </PermitValueRule>
         </AttributeRule>
 
@@ -476,7 +479,7 @@
     <AttributeFilterPolicy id="releaseToEBSCO">
         <PolicyRequirementRule xsi:type="Requester" value="http://shibboleth.ebscohost.com" />
 
-	<AttributeRule attributeID="organizationName">
+	<AttributeRule attributeID="o">
 	    <PermitValueRule xsi:type="ANY" />
 	</AttributeRule>
 
@@ -510,7 +513,10 @@
 
         <AttributeRule attributeID="eduPersonEntitlement">
             <PermitValueRule xsi:type="NOT">
-                <Rule xsi:type="ValueRegex" regex="^urn:cuni:handicap:.*$" />
+		<Rule xsi:type="OR">
+                    <Rule xsi:type="ValueRegex" regex="^urn:cuni:handicap:.*$" />
+                    <Rule xsi:type="Value" value="urn:mace:dir:entitlement:special-needs" caseSensitive="false" />
+		</Rule>
             </PermitValueRule>
         </AttributeRule>
 
@@ -719,6 +725,49 @@
 
     </AttributeFilterPolicy>
 
+    <!-- eduPersonEntitlement with special-needs to selected SPs, pseudonymized -->
+    <AttributeFilterPolicy id="release_epe_special_needs">
+
+        <PolicyRequirementRule xsi:type="OR">
+                <Rule xsi:type="Requester" value="https://login.ceskadigitalniknihovna.cz/realms/kramerius" />
+                <Rule xsi:type="Requester" value="https://login.kramerius.mzk.cz/realms/kramerius" />
+        </PolicyRequirementRule>
+
+        <AttributeRule attributeID="eduPersonEntitlement">
+                <PermitValueRule xsi:type="Value" value="urn:mace:dir:entitlement:special-needs" caseSensitive="false" />
+        </AttributeRule>
+
+        <AttributeRule attributeID="mail">
+            <DenyValueRule xsi:type="ANY"/>
+        </AttributeRule>
+        <AttributeRule attributeID="sn">
+            <DenyValueRule xsi:type="ANY"/>
+        </AttributeRule>
+        <AttributeRule attributeID="givenName">
+            <DenyValueRule xsi:type="ANY"/>
+        </AttributeRule>
+        <AttributeRule attributeID="cn">
+            <DenyValueRule xsi:type="ANY"/>
+        </AttributeRule>
+        <AttributeRule attributeID="telephoneNumber">
+            <DenyValueRule xsi:type="ANY"/>
+        </AttributeRule>
+        <AttributeRule attributeID="eduPersonNickname">
+            <DenyValueRule xsi:type="ANY"/>
+        </AttributeRule>
+        <AttributeRule attributeID="authorizedMail">
+            <DenyValueRule xsi:type="ANY"/>
+        </AttributeRule>
+        <AttributeRule attributeID="commonNameASCII">
+            <DenyValueRule xsi:type="ANY"/>
+        </AttributeRule>
+        <AttributeRule attributeID="eduPersonPrincipalName">
+            <DenyValueRule xsi:type="ANY"/>
+        </AttributeRule>
+
+    </AttributeFilterPolicy>
+
+
     <!-- uid to DERS apps -->
    <AttributeFilterPolicy id="release_to_ders">
 	<PolicyRequirementRule xsi:type="InEntityGroup" groupID="https://ders.cz/" />
@@ -732,13 +781,14 @@
     <!-- release everything to ldapX.cuni.cz -->
     <AttributeFilterPolicy id="release_to_ldaps">
         <PolicyRequirementRule xsi:type="OR">
+ 		<Rule xsi:type="InEntityGroup" groupID="urn:mace:cesnet.cz:cuni-internal" />
 		<Rule xsi:type="Requester" value="https://ldap1.cuni.cz/shibboleth" />
 		<Rule xsi:type="Requester" value="https://ldap2.cuni.cz/shibboleth" />
 		<Rule xsi:type="Requester" value="https://ldap3.cuni.cz/shibboleth" />
 		<Rule xsi:type="Requester" value="https://ldapuser.cuni.cz/shibboleth" />
 	</PolicyRequirementRule>
 
-	<AttributeRule attributeID="organizationName">
+	<AttributeRule attributeID="o">
 	    <PermitValueRule xsi:type="ANY" />
 	</AttributeRule>
 
