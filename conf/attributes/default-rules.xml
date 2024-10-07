@@ -27,5 +27,6 @@
     <import resource="samlSubject.xml" />
     <import resource="cesnetAttributes.xml" />
     <import resource="cuniAttributes.xml" />
+    <import resource="casAttributes.xml" />
 
 </beans>

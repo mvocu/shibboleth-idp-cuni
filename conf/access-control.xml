@@ -33,15 +33,15 @@
                 p:allowedRanges="#{ {'127.0.0.1/32', '::1/128'} }" />
         </entry>
         
-        <!--
+        <!-- -->
         <entry key="AccessByAdminUser">
             <bean parent="shibboleth.PredicateAccessControl">
                 <constructor-arg>
-                    <bean parent="shibboleth.Conditions.SubjectName" c:collection="#{'jdoe'}" />
+                    <bean parent="shibboleth.Conditions.SubjectName" c:collection="#{'49237695'}" />
                 </constructor-arg>
             </bean>
         </entry>
-        -->
+        <!-- -->
         
         <!--
         <entry key="AccessByAttribute">
