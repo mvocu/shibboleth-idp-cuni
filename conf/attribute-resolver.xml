@@ -123,9 +123,9 @@ list of possible components and their options.
 
     <!--
 	UserId
-	  - for nameid generation for Azure
+	  - UserPrincipalName for Azure
     -->
-    <AttributeDefinition id="UserId" xsi:type="Scoped" scope="uktest.%{idp.scope}">
+    <AttributeDefinition id="UserId" xsi:type="Scoped" scope="%{idp.scope}">
         <InputDataConnector ref="cuniLDAP" attributeNames="cuniPersonalId" />
  	<AttributeEncoder xsi:type="SAML2ScopedString" name="IDPEmail" />
     </AttributeDefinition>
