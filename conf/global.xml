@@ -85,4 +85,51 @@
         p:username="%{cuni.cas.db_user:shibboleth}"
         p:password="%{cuni.cas.db_password:PASS}" />
 
+    <bean id="cuni.AttributeConsentCondition" parent="shibboleth.Conditions.NOT">
+        <constructor-arg>
+            <bean id="cuni.AttributeConsentCondition" parent="shibboleth.Conditions.OR">
+                <constructor-arg>
+                    <list>
+                        <bean parent="shibboleth.Conditions.RelyingPartyId">
+                            <constructor-arg name="candidates">
+                                <list>
+                                    <value>urn:federation:MicrosoftOnline</value>
+                                </list>
+                            </constructor-arg>
+                        </bean>
+                        <bean parent="shibboleth.Conditions.EntityDescriptor">
+                            <constructor-arg name="pred">
+                                <bean class="org.opensaml.saml.common.profile.logic.EntityGroupNamePredicate">
+                                    <constructor-arg>
+                                        <list>
+                                            <value>urn:mace:cesnet.cz:cuni-internal</value>
+                                        </list>
+                                    </constructor-arg>
+                                </bean>
+                            </constructor-arg>
+                        </bean>
+                        <bean parent="shibboleth.Conditions.Scripted" factory-method="inlineScript">
+                            <constructor-arg>
+                                <value>
+                                    <![CDATA[
+                                "use strict";
+                                var result = false;
+
+                                // an implementation of Predicate<ProfileRequestContext>
+                                // The IdP environment provides two variables "profileContext" and "custom".
+                                //     profileContext  is of type org.opensaml.profile.context.ProfileRequestContext
+                                //     custom          is whatever you injected
+                                // The value of the last statement in this function is the reurn value
+
+                                result;
+                                    ]]>
+                                </value>
+                            </constructor-arg>
+                        </bean>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+     </bean>
+
 </beans>
