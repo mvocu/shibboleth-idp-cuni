@@ -746,7 +746,7 @@
         </AttributeRule>
 
         <AttributeRule attributeID="mail">
-            <DenyValueRule xsi:type="ANY"/>
+            <PermitValueRule xsi:type="ANY"/>
         </AttributeRule>
         <AttributeRule attributeID="sn">
             <DenyValueRule xsi:type="ANY"/>
