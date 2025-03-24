@@ -588,7 +588,12 @@
                                         }
                               } else if("google.com/a/ktf.cuni.cz" == peerId) {
                                         if(typeof(cuniPrincipalName) != undefined) {
-                                                values.add(new ScopedAttributeValue(cuniPrincipalName.getValues().get(0).toLowerCase(), "ktf.cuni.cz"));
+						name = cuniPrincipalName.getValues().get(0).toLowerCase();
+						//match = /(.*)\/.*/.exec(name);
+						//if(match) {
+						//	name = match[1];
+						//}
+                                                values.add(new ScopedAttributeValue(name, "ktf.cuni.cz"));
                                         }
                               }
 
