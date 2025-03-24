@@ -773,7 +773,7 @@
             <DenyValueRule xsi:type="ANY"/>
         </AttributeRule>
         <AttributeRule attributeID="eduPersonUniqueId">
-            <DenyValueRule xsi:type="ANY"/>
+            <PermitValueRule xsi:type="ANY"/>
         </AttributeRule>
         <AttributeRule attributeID="unstructuredName">
             <DenyValueRule xsi:type="ANY"/>
