@@ -34,10 +34,36 @@
     Uncomment and add entries to this map to support "inexact" SAML RequestedAuthnContext operators.
     Please refer to the AuthenticationFlowSelection documentation topic for details and examples. 
     -->
-    <!--
     <util:map id="shibboleth.AuthnComparisonRules">
+
+        <entry key-ref="shibboleth.SAMLACClassRefMinimum">
+                <bean parent="shibboleth.InexactMatchFactory">
+                        <property name="matchingRules">
+                                <util:map>
+                                        <entry key="urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport">
+                                                <list>
+                                                        <value>urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</value>
+                                                        <value>https://refeds.org/profile/mfa</value>
+                                                        <value>https://refeds.org/profile/sfa</value>
+                                                </list>
+                                        </entry>
+                                        <entry key="https://refeds.org/profile/mfa">
+                                                <list>
+                                                        <value>https://refeds.org/profile/mfa</value>
+                                                </list>
+                                        </entry>
+                                        <entry key="https://refeds.org/profile/sfa">
+                                                <list>
+                                                        <value>https://refeds.org/profile/mfa</value>
+                                                        <value>https://refeds.org/profile/sfa</value>
+                                                </list>
+                                        </entry>
+                                </util:map>
+                        </property>
+                </bean>
+        </entry>
+
     </util:map>
-    -->
 
     <!-- List of context classes or declarations to ignore if an SP requests them. -->
 
