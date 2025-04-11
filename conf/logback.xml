@@ -157,7 +157,7 @@
     <appender name="IDP_AUDIT_STATS" class="ch.qos.logback.classic.net.SyslogAppender">
         <syslogHost>${idp.fticks.loghost:-localhost}</syslogHost>
         <port>${idp.fticks.logport:-514}</port>
-        <facility>LOCAL5</facility>
+        <facility>local5</facility>
         <suffixPattern>[%thread] %logger %msg</suffixPattern>
     </appender>
 
