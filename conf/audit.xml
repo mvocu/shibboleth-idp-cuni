@@ -15,6 +15,7 @@
     -->
     <util:map id="shibboleth.AuditFormattingMap">
         <entry key="Shibboleth-Audit" value="%a|%ST|%T|%u|%SP|%i|%ac|%t|%attr|%n|%f|%SSO|%XX|%XA|%b|%bb|%e|%S|%SS|%s|%UA" />
+        <entry key="Shibboleth-Audit-Stats" value="%T|%u|%a|%SP|%P|%S|%SM|" />
     </util:map>
 
     <!-- Override the format of date/time fields in the log and/or convert to default time zone. -->
