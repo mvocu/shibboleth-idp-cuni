@@ -28,7 +28,7 @@
         eduPersonAssurance
     -->
     <DataConnector id="staticAttributes" xsi:type="Static"
-	exportAttributes="o eduPersonOrgDN schacHomeOrganization schacHomeOrganizationType">
+	exportAttributes="o eduPersonOrgDN schacHomeOrganization schacHomeOrganizationType eduPersonAssurance">
 
         <Attribute id="o">
             <Value>Charles University</Value>
@@ -37,6 +37,7 @@
             <Value>o=Charles University,dc=cuni,dc=cz</Value>
         </Attribute>
         <Attribute id="eduPersonAssurance">
+            <Value>https://refeds.org/assurance</Value>
             <Value>https://refeds.org/assurance/ID/unique</Value>
             <Value>https://refeds.org/assurance/ID/eppn-unique-no-reassign</Value>
             <Value>https://refeds.org/assurance/IAP/low</Value>
