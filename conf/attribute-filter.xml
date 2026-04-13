@@ -434,6 +434,10 @@
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
+        <AttributeRule attributeID="cuniPreferredMail">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
+
         <AttributeRule attributeID="commonNameASCII">
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
@@ -550,6 +554,10 @@
         </AttributeRule>
 
         <AttributeRule attributeID="authorizedMail">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
+
+        <AttributeRule attributeID="cuniPreferredMail">
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
@@ -766,6 +774,9 @@
         <AttributeRule attributeID="authorizedMail">
             <DenyValueRule xsi:type="ANY"/>
         </AttributeRule>
+        <AttributeRule attributeID="cuniPreferredMail">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
         <AttributeRule attributeID="commonNameASCII">
             <DenyValueRule xsi:type="ANY"/>
         </AttributeRule>
@@ -877,6 +888,10 @@
         </AttributeRule>
 
         <AttributeRule attributeID="authorizedMail">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
+
+        <AttributeRule attributeID="cuniPreferredMail">
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 

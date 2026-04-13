@@ -86,7 +86,7 @@
         noResultIsError="false"
         multipleResultsIsError="true"
         excludeResolutionPhases="c14n/attribute"
-        exportAttributes="cn givenName sn mail telephoneNumber preferredLanguage eduPersonNickname eduPersonOrgUnitDN eduPersonPrimaryAffiliation eduPersonPrimaryOrgUnitDN cuniPersonalId cuniScopedAffiliation cuniPrincipalName cuniBirthDate">
+        exportAttributes="cn givenName sn mail telephoneNumber preferredLanguage eduPersonNickname eduPersonOrgUnitDN eduPersonPrimaryAffiliation eduPersonPrimaryOrgUnitDN cuniPersonalId cuniScopedAffiliation cuniPrincipalName cuniBirthDate cuniO365PrimaryMail">
         <FilterTemplate>
             <![CDATA[
                 %{idp.attribute.resolver.LDAP.searchFilter}

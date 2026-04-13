@@ -32,6 +32,10 @@ list of possible components and their options.
     -->
     <AttributeDefinition id="uid" xsi:type="PrincipalName" />
 
+    <!-- 
+        samlPairwiseID
+    -->
+
     <!--
 	eduPersonPrincipalName
     -->
@@ -80,6 +84,13 @@ list of possible components and their options.
     -->
     <AttributeDefinition id="cuniAuthenticationLevel" xsi:type="Simple">
         <InputDataConnector ref="scriptedAttributes" attributeNames="authenticationLevel" />
+    </AttributeDefinition>
+
+    <!--
+        cuniPreferredMail
+    -->
+    <AttributeDefinition id="cuniPreferredMail" xsi:type="Simple">
+        <InputDataConnector ref="cuniLDAP" attributeNames="cuniO365PrimaryMail" />
     </AttributeDefinition>
 
     <!--

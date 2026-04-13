@@ -190,6 +190,20 @@
             </property>
         </bean>
 
+        <bean parent="shibboleth.TranscodingProperties">
+            <property name="properties">
+                <props merge="true">
+                    <prop key="id">cuniPreferredMail</prop>
+                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="saml2.name">http://cas.cuni.cz/attrs/cunipreferredmail</prop>
+                    <prop key="displayName.en">Preferred e-mail address</prop>
+                    <prop key="displayName.cs">Zvolená e-mailová adresa</prop>
+                    <prop key="description.en">Preferred e-mail address managed by organization (single value)</prop>
+                    <prop key="description.cs">Zvolená e-mailová adresa spravovaná organizací (jedna hodnota)</prop>
+                </props>
+            </property>
+        </bean>
+
     </list>
     </constructor-arg>
     </bean>
