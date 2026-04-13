@@ -32,6 +32,10 @@ list of possible components and their options.
     -->
     <AttributeDefinition id="uid" xsi:type="PrincipalName" />
 
+    <AttributeDefinition xsi:type="Scoped" id="samlPairwiseID" scope="%{idp.scope}">
+         <InputDataConnector ref="computedIDConnector" attributeNames="computedId"/>
+    </AttributeDefinition>
+
     <!--
 	eduPersonPrincipalName
     -->
