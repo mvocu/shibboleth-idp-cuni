@@ -16,7 +16,7 @@
                             urn:mace:shibboleth:2.0:security http://shibboleth.net/schema/idp/shibboleth-security.xsd">
 
     <DataConnector id="scriptedAttributes" xsi:type="ScriptedDataConnector"
-	exportAttributes="eduPersonAffiliation eduPersonEntitlement cuniPersonScopedAffiliation mefaPerson authorizedMail eduPersonAssurance schacPersonalUniqueCode" >
+	exportAttributes="eduPersonAffiliation eduPersonEntitlement cuniPersonScopedAffiliation mefaPerson authorizedMail cuniPreferredMail eduPersonAssurance schacPersonalUniqueCode" >
 
         <InputDataConnector ref="cuniLDAP" allAttributes="true" />
 
@@ -551,6 +551,26 @@
 
 			      attr.setValues(values);
 			      connectorResults.add(attr);
+
+           // ------------------------------
+           //   cuniPreferredMail
+           // ------------------------------
+
+                              attr = new IdpAttribute("cuniPreferredMail");
+                              values = new HashSet();
+
+
+                              if(typeof(cuniO365PrimaryMail) != "undefined") {
+                                      values.addAll(cuniAuthorizedMail.getNativeAttribute().getValues());
+                              } else {
+                                      if(typeof(cuniPersonalId) != "undefined") {
+                                            id = cuniPersonalId.getValues().get(0);
+                                            values.add(new StringAttributeValue(id + "@o365.cuni.cz"));
+                                      }
+                              }
+
+                              attr.setValues(values);
+                              connectorResults.add(attr);
 
            // ------------------------------
            //   authenticationLevel
