@@ -561,7 +561,7 @@
 
 
                               if(typeof(cuniO365PrimaryMail) != "undefined") {
-                                      values.addAll(cuniAuthorizedMail.getNativeAttribute().getValues());
+                                      values.addAll(cuniO365PrimaryMail.getNativeAttribute().getValues());
                               } else {
                                       if(typeof(cuniPersonalId) != "undefined") {
                                             id = cuniPersonalId.getValues().get(0);
