@@ -337,6 +337,7 @@
 	commonNameASCII
 	unstructuredName
 	authorizedMail
+        cuniPreferredMail
        eduPersonTargetedId
        eduPersonUniqueId
      -->
@@ -745,6 +746,7 @@
             <Rule xsi:type="OR">
                 <Rule xsi:type="Requester" value="https://login.ceskadigitalniknihovna.cz/realms/kramerius" />
                 <Rule xsi:type="Requester" value="https://login.kramerius.mzk.cz/realms/kramerius" />
+                <Rule xsi:type="Requester" value="https://kramerius-login.lib.cas.cz/realms/Kramerius" />
             </Rule>
             <Rule xsi:type="Value" value="urn:mace:dir:entitlement:special-needs" caseSensitive="false" />
         </PolicyRequirementRule>
